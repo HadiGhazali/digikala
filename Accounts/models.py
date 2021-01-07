@@ -38,10 +38,12 @@ class UserManger(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.EmailField(_('email address'), unique=True)
-    phone_number = models.CharField(_('Phone number'), max_length=40)
+    phone_number = models.CharField(_('Phone number'), max_length=40, unique=True)
     first_name = models.CharField(_('First name'), max_length=150, null=True, blank=True)
     last_name = models.CharField(_('Last name'), max_length=150, null=True, blank=True)
     image = models.ImageField(_("image"), upload_to='account/user/images', null=True, blank=True)
+    create_at = models.DateTimeField(_('Create at'), auto_now_add=True)
+    update_at = models.DateTimeField(_('Update at'), auto_now=True)
 
     class Meta:
         verbose_name = _('user')
@@ -49,7 +51,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     EMAIL_FIELD = 'username'
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['phone_number']
 
     is_staff = models.BooleanField(
         _('staff status'),
@@ -65,7 +66,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         ),
     )
 
-    object = UserManger()
+    objects = UserManger()
 
     def clean(self):
         super().clean()
@@ -91,10 +92,12 @@ class Email(models.Model):
     to = models.ForeignKey(User, verbose_name=_('to'), on_delete=models.SET_NULL, null=True)
     subject = models.CharField(_('Subject'), max_length=150)
     body = models.TextField(_('Body'))
+    create_at = models.DateTimeField(_('Create at'), auto_now_add=True)
+    update_at = models.DateTimeField(_('Update at'), auto_now=True)
 
     class Meta:
-        verbose_name = _('user')
-        verbose_name_plural = _('users')
+        verbose_name = _('Email')
+        verbose_name_plural = _('Emails')
 
 
 class Address(models.Model):
@@ -103,6 +106,8 @@ class Address(models.Model):
     street = models.CharField(_('street'), max_length=150)
     zip_code = models.CharField(_('Zip code'), max_length=150)
     allay = models.CharField(_('Allay'), max_length=150)
+    create_at = models.DateTimeField(_('Create at'), auto_now_add=True)
+    update_at = models.DateTimeField(_('Update at'), auto_now=True)
 
     class Meta:
         verbose_name = _('address')
@@ -114,7 +119,12 @@ class Shop(models.Model):
     name = models.CharField(_('name'), max_length=150)
     description = models.TextField(_('Description'), max_length=150)
     image = models.ImageField(_('image'), upload_to='account/shop/images')
+    create_at = models.DateTimeField(_('Create at'), auto_now_add=True)
+    update_at = models.DateTimeField(_('Update at'), auto_now=True)
 
     class Meta:
         verbose_name = _('shop')
         verbose_name_plural = _('shops')
+
+    def __str__(self):
+        return self.name

@@ -1,0 +1,26 @@
+<div class="slider-area">
+    <!-- Slider -->
+    <div class="block-slider block-slider4">
+        <ul class="" id="bxslider-home4">
+            {% for slide in slide_list %}
+                <li>
+                    <img src="{{ slide.image.url }}" style=" width: 40%" alt="Slide">
+                    <div class="caption-group">
+                        <h2 class="caption title">
+                            <span class="primary">
+                                {{ slide.title }}</span>
+                        </h2>
+
+                        <h4 class="caption subtitle">
+                            {{ slide.subtitle }}
+                        </h4>
+                        <a class="caption button-radius" href="{{ slide.action_url }}"><span class="icon"></span>
+                            {{ slide.action_text }}</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <!-- ./Slider -->
+</div> <!-- End slider area -->
+

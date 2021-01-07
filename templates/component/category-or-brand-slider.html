@@ -1,0 +1,18 @@
+<div class="brands-area">
+    <div class="zigzag-bottom"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="brand-wrapper">
+                    <div class="brand-list">
+                        {% for item in item_list %}
+                            <a href="{{ item.get_absolute_url }}">
+                                <img src="{{ item.image.url }}" alt="">
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
