@@ -16,7 +16,7 @@ class Category(models.Model):
     update_at = models.DateTimeField(_("Update at"), auto_now=True)
     parent = models.ForeignKey('self', verbose_name=_("Parent"), on_delete=models.SET_NULL, null=True, blank=True,
                                related_name='children', related_query_name='children')
-    image = models.ImageField(upload_to='product/category/image' ,null=True, blank=True)
+    image = models.ImageField(upload_to='product/category/image', null=True, blank=True)
 
     class Meta:
         verbose_name = _("Category")
@@ -77,7 +77,8 @@ class Product(models.Model):
 
 class ProductImage(models.Model):
     image = models.ImageField(_('image'), upload_to='product/product/otherImage', null=True, blank=True)
-    product = models.ForeignKey(Product, verbose_name=_('product'), on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, verbose_name=_('product'), on_delete=models.CASCADE,
+                                related_name='product_image', related_query_name='product_image')
 
 
 class ProductMeta(models.Model):

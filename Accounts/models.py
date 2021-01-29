@@ -121,6 +121,7 @@ class Shop(models.Model):
     image = models.ImageField(_('image'), upload_to='account/shop/images')
     create_at = models.DateTimeField(_('Create at'), auto_now_add=True)
     update_at = models.DateTimeField(_('Update at'), auto_now=True)
+    satisfaction = models.PositiveIntegerField(_('satisfaction'), null=True, blank=True)
 
     class Meta:
         verbose_name = _('shop')

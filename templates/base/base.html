@@ -1,74 +1,26 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
-
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
 
-    <!--title-->
-    <title>
-        {% block title %}
-            base
-        {% endblock %}
-    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}
+    {% endblock %}</title>
+    {% block css %}{% endblock %}
 
-    <!-- Google Fonts -->
-    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
-          type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
-
-    <!-- Bootstrap -->
-
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="{% static 'css/css/font-awesome.min.css' %}">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{% static 'css/css/owl.carousel.css' %}">
-    <link rel="stylesheet" href="{% static 'css/css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/css/responsive.css' %}">
-    <link rel="stylesheet" href="{% static 'css/css/bootstrap.min.css' %}">
-
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css"
           integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="{% static 'js/js/html5shiv.min.js' %}"></script>
-    <script src="{% static 'js/js/respond.min.js' %}"></script>
-    <![endif]-->
-
-
 </head>
-
-
 <body>
 {% block body %}{% endblock %}
-<!-- Latest jQuery form server -->
-<script src="{% static 'js/js/jquery.min.js' %}"></script>
-
-<!-- Bootstrap JS form CDN -->
-<script src="{% static 'js/js/bootstrap.min.js' %}"></script>
-
-
-<!-- jQuery sticky menu -->
-<script src="{% static 'js/js/owl.carousel.min.js' %}"></script>
-<script src="{% static 'js/js/jquery.sticky.js' %}"></script>
-
-<!-- jQuery easing -->
-<script src="{% static 'js/js/jquery.easing.1.3.min.js' %}"></script>
-
-<!-- Main Script -->
-<script src="{% static 'js/js/main.js' %}"></script>
-
-<!-- Slider -->
-<script type="text/javascript" src="{% static 'js/js/bxslider.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/js/script.slider.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+<script src="{% static 'js/header.js' %}"></script>
+<script src="{% static 'js/search-field.js' %}"></script>
 {% block javascript %}{% endblock %}
 </body>
 </html>
