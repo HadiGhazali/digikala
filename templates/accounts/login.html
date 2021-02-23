@@ -1,0 +1,74 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+{% block body %}
+    <div class="h-100 w-100">
+        <div>{% include 'base/header.html' %}</div>
+        <div class="w-100 h-100 d-flex">
+            <div class="row w-50 h-50 m-auto justify-content-center border my-rounded bg-white">
+                <div class="col-6">
+                    <div class="container m-1 p-3 h-100">
+                        <div class="p-3 h-100">
+                            <form action="{% url 'login' %}" method="post">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    {% for feild in form %}
+                                        <div>
+                                            <div>
+                                                <span style="font-size: 14px"> {{ feild.label_tag }}</span>
+                                            </div>
+                                            <div>
+                                                {{ feild }}
+                                            </div>
+
+
+
+                                            {% for error in  feild.errors %}
+                                                <div class="alert alert-danger mt-2" role="alert">
+                                                    <span style="font-size: 14px">
+                                                        {{ error }}
+                                                    </span>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endfor %}
+                                    <hr>
+                                    {% for form_erorr in form.non_field_errors %}
+                                        <div class="alert alert-danger mt-2">
+                                            {{ form_erorr }}
+                                        </div>
+                                    {% endfor %}
+                                    <div class="mt-3">
+                                        <button type="submit" class="w-100 btn btn-primary">Login</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div>
+                                <a href="{% url 'register' %}">
+                                    <span style="font-size: 11px">
+                                        Sign Up Now!
+                                    </span>
+                                </a>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-6 p-0">
+                    <div class="w-100 h-100 p-0" style="background-image: url({% static 'img/login-image.jpg' %});
+                            border-radius: 0 1rem 1rem 0;
+                            background-size: cover;"></div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div>{% include 'base/footer.html' %}</div>
+
+{% endblock %}
+

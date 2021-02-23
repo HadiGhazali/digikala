@@ -1,0 +1,256 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block body %}
+    {% include 'base/header.html' %}
+    <div class="my-container">
+
+        <div class="row" dir="rtl">
+
+            <div class="col-9">
+                {% if basket_item.0 %}
+
+                    <!--Card-->
+                    <div class="row border m-3 p-3 bg-white" dir="rtl">
+                        {% for item in basket_item %}
+                            <div id="itemContainer{{ item.id }}" class="col-12">
+                                <div class="row col-12">
+                                    <div class="col-3 m-auto">
+                                        <a href="{% url 'product_single' item.shop_product.product.slug %}">
+                                            <img src="{{ item.shop_product.product.image.url }}" alt="..."
+                                                 class="img-thumbnail border-0">
+                                        </a>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="card-content" style="text-align: right">
+
+                                            <h2>{{ item.shop_product.product.name }}</h2>
+                                            <p><i class="fas fa-shield-alt"></i><span class="m-2">گارانتی اصالت و سلامت فیزیکی کالا  </span>
+                                            </p>
+                                            <p><i class="fas fa-store-alt"></i><span
+                                                    class="m-2">{{ item.shop_product.shop.name }}  </span></p>
+                                            <p><i class="fas fa-store"></i><span
+                                                    class="m-2"> موجود در انبار فروشگاه </span></p>
+                                            <div class="row" dir="rtl">
+                                                <div class="col-4 p-0 m-0">
+                                                    <div class="row col-lg-6 text-primary p-0 m-0 border justify-content-between">
+                                                        <div id="itemContainer{{ item.id }}"
+                                                             onclick="count({{ item.id }}, true);total_price_of_basket({{ basket.id }})"
+                                                             class="col-3 text-center p-0 m-0"><i
+                                                                class="fas fa-plus"></i></div>
+                                                        <div id="countContainer{{ item.id }}" class="col-3 p-0 m-0"
+                                                             style="text-align: center">{{ item.count }}</div>
+                                                        <div onclick="count({{ item.id }}, false);total_price_of_basket({{ basket.id }})"
+                                                             class="col-3 text-center p-0 m-0"><i
+                                                                class="fas fa-minus"></i></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4 text-center">
+                                                    <div onclick="delete_item({{ item.id }});total_price_of_basket({{ basket.id }})">
+                                                        <i
+                                                                class="fas fa-trash-alt mx-2 text-danger"></i><span>حذف</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4 d-flex justify-content-end">
+                                                    <p style="text-align: left" id="totalPrice{{ item.id }}">قیمت
+                                                        کل{{ item.total_price_of_one_item }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <!--End Card-->
+
+                {% else %}
+                    <div class="bg-white border my-rounded-1 m-3">
+                        <div class="text-center">
+                            <i class="fas fa-shopping-basket" style="font-size: 10rem; color: #919191"></i>
+                        </div>
+                        <p class="text-center" style="color: #595959;">سبد خرید شما خالی است!</p>
+                    </div>
+
+                {% endif %}
+            </div>
+            <div class="col-3 bg-white my-rounded-1 border my-3">
+                <div class="m-3 ">
+                    <div class="row">
+                        <div class="col-6 p-0 m-0 text-right">
+                            <span>قیمت کالاها</span>
+                            <span id="countItemSpan">({{ basket.count_of_items }})</span>
+                        </div>
+                        <div class="col-6">
+                        <span id="total_price">
+                            {{ basket.total_price }}
+                        </span>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                {% if basket_item.0 %}
+                    <div>
+                        <!-- Button trigger modal -->
+                        <a href="{% url 'payment_view' %}">
+                            <button type="button" class="btn btn-danger w-100 text-center" data-toggle="modal"
+                                    data-target="#myModalNorm">ادامه خرید
+                            </button>
+                        </a>
+
+                    </div>
+                {% else %}
+                    <div dir="rtl" class="text-right">
+                        <a href="{% url 'login' %}">
+                            <i class="fas fa-sign-in-alt mx-2" style="color: #e4a000"></i>
+                            <span>ورود به حساب کاربری</span>
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!--Multi Slider-->
+        <div class="my-3">
+            <div class="my-container bg-white">
+                <div dir="rtl" class="text-right">
+                    <div class="d-inline-block m-2">
+                        پیشنهاد ویژه برای شما
+                        <hr style="background-color: #d41e0c">
+                    </div>
+                </div>
+
+                <div class="row p-3">
+                    <div class="col-12">
+                        <div id="carouselExampleControls4" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <div class="row custom-height ">
+                                        {% for product in products|slice:":5" %}
+                                            <div class="col-2 w-100">
+                                                <div class="h-100 bg-white my-rounded w-100 shadow">
+                                                    <figure class="figure h-50 w-100 mx-auto">
+                                                        <img src="{{ product.image.url }}"
+                                                             class="figure-img img-fluid w-100 my-rounded h-100 p-1 mx-auto"
+                                                             alt="A generic square placeholder image with my-rounded corners in a figure.">
+                                                    </figure>
+                                                    <h3>
+                                                        {{ product.name }}
+                                                    </h3>
+                                                </div>
+                                            </div>
+
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <div class="row custom-height">
+                                        {% for product in products|slice:"5:10" %}
+                                            <div class="col-2">
+                                                <div class="h-100 m-2 bg-white rounded shadow">
+                                                    <figure class="figure h-50">
+                                                        <img src="{{ product.image.url }}"
+                                                             class="figure-img img-fluid rounded h-100 p-1"
+                                                             alt="A generic square placeholder image with rounded corners in a figure.">
+                                                    </figure>
+                                                    <h3>
+                                                        {{ product.name }}
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselExampleControls4" role="button"
+                           data-slide="prev"
+                           style="width: 5%">
+                        <span class='' aria-hidden="true"><i class="fas fa-chevron-left"
+                                                             style="color: black;"></i></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleControls4" role="button"
+                           data-slide="next"
+                           style="width: 5%">
+                        <span class='' aria-hidden="true"><i class="fas fa-chevron-right"
+                                                             style="color: black;"></i></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End Multi Slider-->
+
+    </div>
+    {% include 'base/footer.html' %}
+{% endblock %}
+{% block javascript %}
+
+    <script>
+        function count(item_id, condition) {
+            let data = {
+                item_id: item_id,
+                condition
+            }
+            data = JSON.stringify(data)
+
+            $.ajax({
+                type: 'POST',
+                url:{% url 'increase_or_decrease_count' %},
+                data: data,
+                success: function (response) {
+                    let res = JSON.parse(response)
+                    $(`#countContainer${res.item_id}`).text(res.item_count)
+                    $(`#totalPrice${res.item_id}`).text('قیمت کل' + res.total_price)
+                    if (res.delete_status === 0) {
+                        $(`#itemContainer${res.item_id}`).remove()
+                    }
+                }
+            })
+        }
+
+        function delete_item(item_id) {
+            let data = {
+                item_id: item_id,
+            }
+            data = JSON.stringify(data)
+
+            $.ajax({
+                type: 'POST',
+                url:{% url 'delete_item' %},
+                data: data,
+                success: function (response) {
+                    let res = JSON.parse(response)
+                    $(`#itemContainer${res.item_id}`).remove()
+                }
+            })
+        }
+
+        function total_price_of_basket(basket_id) {
+            let data = {
+                basket_id: basket_id,
+            }
+            data = JSON.stringify(data)
+            $.ajax({
+                type: 'POST',
+                url:{% url 'calculate_total_price' %},
+                data: data,
+                success: function (response) {
+                    let res = JSON.parse(response)
+                    $(`#total_price`).text(res.total_price)
+                    $(`#countItemSpan`).text(res.count_of_items)
+                }
+            })
+        }
+
+    </script>
+{% endblock %}
+
+
+
+
+
+

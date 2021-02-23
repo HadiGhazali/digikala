@@ -1,0 +1,436 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %}
+    {{ product.name }}
+{% endblock %}
+{% block body %}
+
+    <!--Header-->
+    {% include 'base/header.html' %}
+    <!--End Header-->
+
+    <div class="my-container" dir="rtl">
+        <div style="text-align: right">
+            {% for related_category in related_categories %}
+                {{ related_category }}/
+            {% endfor %}
+        </div>
+
+        <!--Product-->
+        <div class="row m-0 p-0">
+            <!--Product Images-->
+            <div class="col-md-4 col-12">
+                <img src="{{ product.image.url }}" width="100%" class="custom-height">
+                <div class="row my-3">
+                    {% for image in images %}
+                        <div class="col-4 w-100">
+                            <div class="rounded border">
+                                <img src="{{ image.image.url }}" alt="..." class="d-block m-auto w-75 py-2">
+                            </div>
+
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <!--End Product Images-->
+
+            <!--Product Information-->
+            <div class="col-md-8 col-12">
+                <h1 style="text-align: right">{{ product.name }}</h1>
+                <div class="row">
+                    <!--Product Detail-->
+                    <div class="col-7">
+                        <hr>
+                        <p>{{ product.details }}</p>
+                    </div>
+                    <!--End Product Detail-->
+
+                    <!--Product Shop-->
+                    <div class="col-5 my-3 border rounded" dir="rtl"
+                         style="text-align: right!important; background-color: #e5e5e5;">
+
+                        <div class="row">
+                            <div class="col-4" dir="rtl">
+                                فروشنده
+                            </div>
+                            <div class="col-4">
+                            </div>
+                            <div class="col-4">
+                                فروشنده دیگر
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-2">
+                                <i class="fas fa-store-alt" style="font-size: 1.25rem"></i>
+                            </div>
+                            <div class="col-10">
+                                <div>
+                                    {{ shop_products.0.shop.name }}
+                                    <br>
+                                    <p style="font-size: 10px">
+                                        <span>عملکرد:</span><span>{{ shop_products.0.shop.satisfaction }}</span><span>از 5</span>
+                                    </p>
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2">
+                                <i class="fas fa-shield-alt" style="font-size: 1.25rem"></i>
+                            </div>
+                            <div class="col-10">
+                                <div>
+                                    <p style="font-size: 14px">گارانتی اصلالت و سلامت کالا</p>
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2">
+                                <i class="fas fa-warehouse" style="font-size: 1.25rem"></i>
+                            </div>
+                            {% if shop_products.0.check_status %}
+                                <div class="col-10">
+                                    <div>
+                                        <p style="font-size: 14px">موجود در انبار</p>
+                                    </div>
+                                    <hr>
+                                </div>
+                            {% else %}
+                                <div class="col-10">
+                                    <div>
+                                        <p style="font-size: 14px">در انبار موجود نمی باشد</p>
+                                    </div>
+                                    <hr>
+                                </div>
+
+                            {% endif %}
+                        </div>
+                        <div>
+                            <p>قیمت فروشنده</p>
+                            <p style="text-align: left; font-size: 20px; font-weight: bold;">{{ shop_products.0.price }}
+                                تومان</p>
+
+                        </div>
+                        <div class="my-2 p-3">
+                            <a href="{% url 'basket_detail' %}">
+                                <button type="button" onclick="addToBasket({{ shop_products.0.id }})"
+                                        class="btn btn-danger w-100">افزودن به سبد خرید
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!--End Product Shop-->
+
+
+            </div>
+            <!--End Product Information-->
+        </div>
+        <hr>
+
+        <!--Shop Products-->
+        <div>
+            <div style="text-align: right!important;">
+                <div class="d-inline-block">
+                    لیست فروشندگان
+                    <hr class="bg-danger">
+                </div>
+            </div>
+            <div>
+                {% for shop_product in shop_products %}
+                    <div class="row" style="text-align: right">
+                        <div class="row col-3">
+                            <div class="col-6">{{ shop_product.shop.name }}</div>
+                            <div class="col-6">عملکرد:{{ shop_product.shop.satisfaction }} از 5</div>
+                        </div>
+
+
+                        <div class="col-3">
+                            <div class="row">
+                                <div class="col-2">
+                                    <i class="fas fa-shield-alt" style="font-size: 1.25rem"></i>
+                                </div>
+                                <div class="col-10 p-0">
+                                    <div>
+                                        <p style="font-size: 14px">گارانتی اصلالت و سلامت کالا</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-2">
+                            <div class="row">
+                                <div class="col-2">
+                                    <i class="fas fa-warehouse" style="font-size: 1.25rem"></i>
+                                </div>
+                                {% if shop_product.check_status %}
+                                    <div class="col-10 p-0">
+                                        <div>
+                                            <p style="font-size: 14px">موجود در انبار</p>
+                                        </div>
+
+                                    </div>
+                                {% else %}
+                                    <div class="col-10 p-0">
+                                        <div>
+                                            <p style="font-size: 14px">در انبار موجود نمی باشد</p>
+                                        </div>
+
+                                    </div>
+
+                                {% endif %}
+                            </div>
+                        </div>
+
+
+                        <div class="col-4 pr-0">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p style="text-align: left; font-size: 20px; font-weight: bold;">{{ shop_product.price }}
+                                        تومان</p>
+
+                                </div>
+
+                                <div class="col-6">
+                                    <a href="{% url 'basket_detail' %}">
+                                        <button type="button" onclick="addToBasket({{ shop_product.id }})"
+                                                class="btn btn-danger w-100">افزودن به سبد خرید
+                                        </button>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <hr>
+                {% endfor %}
+            </div>
+        </div>
+        <!--End Shop Products-->
+
+        <!--Multi Slider-->
+        <div class="my-3">
+            <div class="my-container bg-white">
+                <div class="row" dir="rtl">
+                    <div class="col-2">
+                        <div style="text-align: right">مطالب مرتبط</div>
+                        <hr style="background-color: #d41e0c">
+                    </div>
+                    <div class="col-10">
+                        <br>
+                        <hr>
+                    </div>
+                </div>
+                <div class="row p-3">
+                    <div class="col-12">
+                        <div id="carouselExampleControls4" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <div class="row custom-height ">
+                                        {% for related_product in related_products|slice:":6" %}
+                                            <div class="col-2 w-100">
+                                                <a href="{% url 'product_single' related_product.slug %}">
+                                                    <div class="h-100 bg-white my-rounded w-100 shadow">
+                                                        <figure class="figure h-50 w-100 mx-auto">
+                                                            {% if related_product.image %}
+                                                                <img src="{{ related_product.image.url }}"
+                                                                     class="figure-img img-fluid w-100 my-rounded h-100 p-1 mx-auto"
+                                                                     alt="A generic square placeholder image with my-rounded corners in a figure.">
+                                                            {% endif %}
+                                                        </figure>
+                                                        <h3>
+                                                            {{ related_product.name }}
+                                                        </h3>
+                                                    </div>
+                                                </a>
+                                            </div>
+
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <div class="row custom-height">
+                                        {% for related_product in related_products|slice:"6:12" %}
+                                            <div class="col-2">
+                                                <a href="{% url 'product_single' related_product.slug %}">
+                                                    <div class="h-100 m-2 bg-white rounded shadow">
+                                                        <figure class="figure h-50">
+                                                            <img src="{{ related_product.image.url }}"
+                                                                 class="figure-img img-fluid rounded h-100 p-1"
+                                                                 alt="A generic square placeholder image with rounded corners in a figure.">
+                                                        </figure>
+                                                        <h3>
+                                                            {{ related_product.name }}
+                                                        </h3>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselExampleControls4" role="button"
+                           data-slide="prev"
+                           style="width: 5%">
+                        <span class='' aria-hidden="true"><i class="fas fa-chevron-left"
+                                                             style="color: black;"></i></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleControls4" role="button"
+                           data-slide="next"
+                           style="width: 5%">
+                        <span class='' aria-hidden="true"><i class="fas fa-chevron-right"
+                                                             style="color: black;"></i></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End Multi Slider-->
+
+        <div class="m-3 text-right bg-white" dir="rtl">
+            {% if product.review %}
+                <div id="review" class="d-inline-block mx-3">
+                    نقد و برسی اجمالی
+                    <hr class="bg-danger">
+                </div>
+            {% endif %}
+            <div id="usersIdea" class="d-inline-block mx-3">
+                نظر کاربران
+                <hr class="bg-danger">
+            </div>
+            {% if product.review %}
+                <div class="rounded border">
+                    {{ product.review }}
+                </div>
+            {% endif %}
+
+
+            <div id="ideaContainer">
+                {% for comment in comments %}
+                    <div class="p-3 border">
+                        <div>{{ comment.text }}</div>
+                        <div dir="ltr" class="rating" data-rate-value={{ comment.rate }}></div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div id="formContainer" class="justify-content-center mt-3">
+                <hr>
+                <form id="commentForm" action="">
+                    {% csrf_token %}
+                    {{ form.media }}
+                    <div class="m-auto">
+                        {% for field in form %}
+                            <div style="margin-right: 30%">
+                            {{ field }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div dir="ltr" style="margin-right: 30%" id="newCommentRate" class="rating-change-able" data-rate-value=2></div>
+                    <button type="button" class="btn btn-primary" style="margin-right: 30%" onclick="creatComment({{ product.id }})">Send Comment</button>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+    <!--Footer-->
+    {% include 'base/footer.html' %}
+    <!--End Footer-->
+
+{% endblock %}
+{% block javascript %}
+    <script>
+        const myCommentForm = document.getElementById('commentForm');
+        myCommentForm.addEventListener('submit', event => {
+            event.preventDefault();
+            // actual logic, e.g. validate the form
+        });
+
+        function addToBasket(shop_product_id) {
+            let data = {
+                shop_product_id: shop_product_id
+            }
+            data = JSON.stringify(data)
+
+            $.ajax({
+                type: 'POST',
+                url:{% url 'add_to_basket' %},
+                data: data,
+                success: function () {
+
+                }
+            })
+        }
+
+        function get_and_post_data(data) {
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    type: 'POST',
+                    url: {% url 'create_comment' %},
+                    data: data,
+                    success: function (response) {
+                        resolve(response)
+                    },
+                    fail: function () {
+                        reject(console.log('error'))
+                    }
+                })
+            })
+        }
+
+
+        function addToProductComment(obj) {
+            $('#ideaContainer').prepend(`<div class="p-3 border">
+                        <div>${obj.text}</div>
+                        <div dir="ltr" class="rating" data-rate-value=${parseFloat(obj.rate)}
+style="width: 71.7188px; height: 24px; position: relative; cursor: default; user-select: none;"><div class="rate-base-layer"
+style="width: 100%; height: 24px; overflow: hidden; position: absolute; top: 0px; display: block; white-space: nowrap;">
+<span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div><div class="rate-select-layer" style="width: 40%; height: 24px; overflow: hidden; position: absolute; top: 0px; display: block; white-space: nowrap;"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><div class="rate-hover-layer" style="width: 0%; height: 24px; overflow: hidden; position: absolute; top: 0px; display: none; white-space: nowrap;">
+<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+</div>
+                    </div>`)
+        }
+
+        function creatComment(productId) {
+            let newCommentRate = $("#newCommentRate");
+            let rate = newCommentRate.attr("data-rate-value");
+            let text = $('#id_text').val()
+            let data = JSON.stringify({
+                product_id: productId,
+                rate: rate,
+                text: text,
+            })
+            get_and_post_data(data).then((obj) => {
+                obj = JSON.parse(obj)
+                console.log(obj)
+                addToProductComment(obj)
+            }).catch(() => {
+                console.log('error')
+            })
+
+        }
+
+        $("#usersIdea").click(function () {
+            $('html, body').animate({
+                scrollTop: $("#ideaContainer").offset().top - 40
+            }, 1000);
+        });
+
+
+    </script>
+    <script src="{% static 'js/rater.min.js' %}"></script>
+    <script src="{% static 'js/my-rater.js' %}"></script>
+{% endblock %}

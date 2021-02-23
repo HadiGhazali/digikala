@@ -54,6 +54,7 @@ class Product(models.Model):
     name = models.CharField(_('Name'), max_length=50)
     image = models.ImageField(_('image'), upload_to='product/product/mainImage', null=True, blank=True)
     details = models.TextField(_('Details'))
+    review = models.TextField(_('Details'), null=True, blank=True)
     create_at = models.DateTimeField(_('Create at'), auto_now_add=True)
     update_at = models.DateTimeField(_('Update at'), auto_now=True)
 
@@ -74,6 +75,11 @@ class Product(models.Model):
         q = self.product_like.filter(condition=False)
         return q.count()
 
+    @property
+    def calculate_price(self):
+        shop = self.shop_product_product.all()[0]
+        return shop.price
+
 
 class ProductImage(models.Model):
     image = models.ImageField(_('image'), upload_to='product/product/otherImage', null=True, blank=True)
@@ -88,7 +94,8 @@ class ProductMeta(models.Model):
 
 
 class Comment(models.Model):
-    product = models.ForeignKey(Product, verbose_name=_('product'), on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, verbose_name=_('product'), on_delete=models.CASCADE,
+                                related_name='product_comment', related_query_name='product_comment')
     user = models.ForeignKey(User, verbose_name=_('User'), on_delete=models.SET_NULL, null=True)
     text = models.TextField(_('Text'))
     rate = models.IntegerField(_('Rate'))
@@ -101,12 +108,18 @@ class Comment(models.Model):
 
 
 class ShopProduct(models.Model):
-    product = models.ForeignKey(Product, verbose_name=_('product'), on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, verbose_name=_('product'), on_delete=models.CASCADE,
+                                related_name='shop_product_product', related_query_name='shop_product_product')
     shop = models.ForeignKey(Shop, verbose_name=_('shop'), on_delete=models.CASCADE)
     quantity = models.IntegerField(_('quantity'))
     price = models.IntegerField(_('Price'))
     create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
     update_at = models.DateTimeField(_("Update at"), auto_now=True)
+
+    class Meta:
+        unique_together = [['product', 'shop']]
+        verbose_name = _("Shop Products")
+        verbose_name_plural = _("Shop Products")
 
     @property
     def check_status(self):

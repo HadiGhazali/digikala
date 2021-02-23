@@ -1,0 +1,182 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block css %}
+
+{% endblock %}
+{% block body %}
+
+    {% include 'base/header.html' %}
+    <div class="my-container border my-3 bg-white">
+        <div class="m-3 text-right" dir="rtl">
+            {% if user.is_authenticated %}
+                <div class="row">
+                    <div class="col-4">
+                        <div class="m-auto d-flex justify-content-center">
+                            {% if user.image %}
+                                <img src="{{ user.image.url }}" class="rounded-circle image-size"alt="...">
+                            {% else %}
+                                <img src="{% static 'img/empty-img.jpeg' %}" class="rounded-circle" alt="...">
+                            {% endif %}
+                        </div>
+                        <div class="my-3 text-center">
+                            <div style="font-size: 20px">{{ user.username }}</div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div>
+                    <ul class="list-group text-right" dir="rtl">
+                        <li class="list-group-item row d-flex flex-row">
+                            <div class="col-4">نام</div>
+                            {% if user.last_name %}
+                                <div class="col-4">{{ user.first_name }}</div>
+                            {% else %}
+                                <div class="col-4">هنوز پر نشده است</div>
+                            {% endif %}
+                        </li>
+                        <li class="list-group-item row d-flex flex-row">
+                            <div class="col-4">نام خانوادگی</div>
+                            {% if user.last_name %}
+                                <div class="col-4">{{ user.last_name }}</div>
+                            {% else %}
+                                <div class="col-4">هنوز پر نشده است</div>
+                            {% endif %}
+
+                        </li>
+                        <li class="list-group-item my-3 border-0">
+                            <a href="{% url 'edit_profile' %}">
+                                <button type="button" id="editProfile" class="btn btn-primary border-0">
+                                    ویرایش اطلاعات
+                                </button>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <hr>
+                <div class="text-right" dir="rtl">
+                    {% if user.user_address.all.0 %}
+                        <div>آدرس ها:</div>
+                        <ul class="list-group text-right" dir="rtl" id="addressContainer">
+                            {% for address in user.user_address.all %}
+                                <li class="list-group-item">{{ address.show_address }}</li>
+                            {% endfor %}
+                        </ul>
+                        <ul class="list-group text-right" dir="rtl">
+                            <li class="list-group-item border-0">
+                                <form action="" id="addAddressForm" method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        {% for feild in address_form %}
+                                            <div>
+                                                {{ feild.label_tag }}
+                                                {{ feild }}
+
+                                                {% for error in  feild.errors %}
+                                                    <div class="alert alert-danger mt-2" role="alert">
+                                                        {{ error }}
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        {% endfor %}
+                                        <hr>
+                                        {% for form_erorr in address_form.non_field_errors %}
+                                            <div class="alert alert-danger mt-2">{{ form_erorr }}</div>
+                                        {% endfor %}
+                                        <div class="mt-3">
+                                            <button type="submit" class="btn btn-primary">اضافه کردن آدرس</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </li>
+                        </ul>
+
+                    {% else %}
+                        <ul class="list-group text-right" dir="rtl">
+                            <li class="list-group-item border-0">
+                                <form action="" id="addAddressForm" method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        {% for feild in address_form %}
+                                            <div>
+                                                {{ feild.label_tag }}
+                                                {{ feild }}
+
+                                                {% for error in  feild.errors %}
+                                                    <div class="alert alert-danger mt-2" role="alert">
+                                                        {{ error }}
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        {% endfor %}
+                                        <hr>
+                                        {% for form_erorr in address_form.non_field_errors %}
+                                            <div class="alert alert-danger mt-2">{{ form_erorr }}</div>
+                                        {% endfor %}
+                                        <div class="mt-3">
+                                            <button type="submit" class="btn btn-primary">اضافه کردن آدرس</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </li>
+                        </ul>
+                    {% endif %}
+                </div>
+            {% else %}
+            {% endif %}
+
+
+        </div>
+    </div>
+    {% include 'base/footer.html' %}
+{% endblock %}
+{% block javascript %}
+    <script>
+        $('#addAddressForm').submit(
+            function (e) {
+                e.preventDefault()
+                let a = new FormData(this)
+
+                $.ajax({
+                    type: 'POST',
+                    url:{% url 'add_address' %},
+                    data: {
+                        city: $('#address-city').val(),
+                        street: $('#address-street').val(),
+                        zip_code: $('#address-zip_code').val(),
+                        allay: $('#address-allay').val(),
+                    },
+                    success: function (response) {
+                        let res = JSON.parse(response)
+                        $('#addressContainer').append(`
+                         <li class="list-group-item">${res.address}</li>`)
+                    }
+                })
+
+            }
+        )
+        $('#addAddressForm').submit(
+            function (e) {
+                e.preventDefault()
+                let a = new FormData(this)
+
+                $.ajax({
+                    type: 'POST',
+                    url:{% url 'add_address' %},
+                    data: {
+                        city: $('#address-city').val(),
+                        street: $('#address-street').val(),
+                        zip_code: $('#address-zip_code').val(),
+                        allay: $('#address-allay').val(),
+                    },
+                    success: function (response) {
+                        let res = JSON.parse(response)
+                        $('#addressContainer').append(`
+                         <li class="list-group-item">${res.address}</li>`)
+                    }
+                })
+
+            }
+        )
+
+    </script>
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends 'base/base.html' %}
+{% block body %}
+    {% include 'base/header.html' %}
+    <div class="my-container">
+        <div>
+            <div class="text-center">
+                <div class="row">
+                    <div class="col-3">نام فروشگاه</div>
+                    <div class="col-3">نام کالا</div>
+                    <div class="col-3">تعداد</div>
+                    <div class="col-3">قیمت هر عدد</div>
+
+                </div>
+                <hr>
+                {% for item in basket_item %}
+                    <div class="row">
+                        <div class="col-3">{{ item.get_shop_name }}</div>
+                        <div class="col-3">{{ item.get_name }}</div>
+                        <div class="col-3">{{ item.count }}</div>
+                        <div class="col-3">{{ item.price }}</div>
+                    </div>
+                    <hr>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row justify-content-center m-3">
+            <div class="col-lg-4 col-6">
+                <button type="button" class="btn btn-danger w-100 text-center" data-toggle="modal"
+                        data-target="#myModalNorm">ادامه خرید
+                </button>
+
+
+                <!-- Modal -->
+                <div class="modal fade" id="myModalNorm" tabindex="-1" role="dialog"
+                     aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <button type="button" class="close"
+                                        data-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                                <h4 class="modal-title text-right" id="myModalLabel">
+                                    اضافه کردن به سفارشات
+                                </h4>
+                            </div>
+
+                            <!-- Modal Body -->
+                            <div class="modal-body">
+
+                                <label for="description">
+                                    description
+                                </label>
+                                <hr>
+                                <div>
+                                    <textarea id="description" rows="8" cols="50"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Modal Footer -->
+                            <div class="modal-footer" id="buttonContainer">
+                                <button type="button" class="btn btn-default"
+                                        data-dismiss="modal">
+                                    انصراف
+                                </button>
+
+                                    <button type="button" onclick="create_order({{ basket.id }})" class="btn btn-primary">
+                                        ادامه
+                                    </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    {% include 'base/footer.html' %}
+{% endblock %}
+{% block javascript %}
+    <script>
+        function create_order(basket_id) {
+            let description = $("#description").val();
+            let data = {
+                basket_id: basket_id,
+                description: description,
+            }
+            data = JSON.stringify(data)
+            $.ajax({
+                type: 'POST',
+                url:{% url 'create_order' %},
+                data: data,
+                success: function () {
+                    $('#buttonContainer').append(`<a href="http://127.0.0.1:8000/payment">
+<button type="button"
+                                                class="btn btn-primary"
+                                                >
+                                            رفتن به صفخه پرداخت
+                                        </button>
+
+</a>`)
+                }
+            })
+        }
+    </script>
+{% endblock %}

@@ -51,6 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     EMAIL_FIELD = 'username'
     USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ('phone_number', )
 
     is_staff = models.BooleanField(
         _('staff status'),
@@ -101,7 +102,8 @@ class Email(models.Model):
 
 
 class Address(models.Model):
-    user = models.ForeignKey(User, verbose_name=_('User'), on_delete=models.CASCADE)
+    user = models.ForeignKey(User, verbose_name=_('User'), on_delete=models.CASCADE, related_name='user_address',
+                             related_query_name='user_address')
     city = models.CharField(_('City'), max_length=150)
     street = models.CharField(_('street'), max_length=150)
     zip_code = models.CharField(_('Zip code'), max_length=150)
@@ -113,6 +115,10 @@ class Address(models.Model):
         verbose_name = _('address')
         verbose_name_plural = _('addresses')
 
+    @property
+    def show_address(self):
+        return '{} {}'.format(self.city, self.street)
+
 
 class Shop(models.Model):
     user = models.ForeignKey(User, verbose_name=_('User'), on_delete=models.CASCADE)
@@ -121,7 +127,7 @@ class Shop(models.Model):
     image = models.ImageField(_('image'), upload_to='account/shop/images')
     create_at = models.DateTimeField(_('Create at'), auto_now_add=True)
     update_at = models.DateTimeField(_('Update at'), auto_now=True)
-    satisfaction = models.PositiveIntegerField(_('satisfaction'), null=True, blank=True)
+    satisfaction = models.PositiveIntegerField(_('satisfaction'), null=True, blank=True, default=3)
 
     class Meta:
         verbose_name = _('shop')

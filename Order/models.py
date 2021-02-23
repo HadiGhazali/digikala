@@ -14,6 +14,10 @@ class Basket(models.Model):
     create_at = models.DateTimeField(_('Create at'), auto_now_add=True)
     update_at = models.DateTimeField(_('Update at'), auto_now=True)
 
+    class Meta:
+        verbose_name = _('Basket')
+        verbose_name_plural = _('Baskets')
+
     @property
     def total_price(self):
         t_price = 0
@@ -33,9 +37,12 @@ class Basket(models.Model):
             items += item.__str__()
         return items
 
-    class Meta:
-        verbose_name = _('Basket')
-        verbose_name_plural = _('Baskets')
+    @property
+    def count_of_items(self):
+        n = 0
+        for i in self.get_item():
+            n += i.count
+        return n
 
 
 class BasketItem(models.Model):
@@ -45,8 +52,20 @@ class BasketItem(models.Model):
     count = models.PositiveIntegerField(_('Count'))
     price = models.PositiveIntegerField(_('Price'))
 
+    class Meta:
+        unique_together = [['shop_product', 'basket']]
+
     def set_price(self):
         self.price = self.shop_product.price
+        self.save()
+
+    def add_count(self):
+        self.count += 1
+        self.save()
+
+    def decrease_count(self):
+        self.count -= 1
+        self.save()
 
     @property
     def total_price_of_one_item(self):
@@ -73,6 +92,10 @@ class Order(models.Model):
 
     description = models.TextField(_('Description'), null=True, blank=True)
 
+    class Meta:
+        verbose_name = _('Order')
+        verbose_name_plural = _('Orders')
+
     @property
     def total_price(self):
         t_price = 0
@@ -91,9 +114,12 @@ class Order(models.Model):
             items += item.__str__()
         return items
 
-    class Meta:
-        verbose_name = _('Order')
-        verbose_name_plural = _('Orders')
+    @property
+    def count_of_items(self):
+        n = 0
+        for i in self.get_item():
+            n += i.count
+        return n
 
 
 class OrderItem(models.Model):
@@ -106,9 +132,6 @@ class OrderItem(models.Model):
     @property
     def total_price_of_one_item(self):
         return self.price * self.count
-
-    def set_price(self):
-        self.price = self.shop_product.price
 
     @property
     def get_name(self):
@@ -130,7 +153,8 @@ class Payment(models.Model):
 
     def set_amount(self):
         self.amount = self.order.total_price
+        self.save()
 
-        class Meta:
-            verbose_name = _('Payment')
-            verbose_name_plural = _('Payments')
+    class Meta:
+        verbose_name = _('Payment')
+        verbose_name_plural = _('Payments')

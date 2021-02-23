@@ -1,0 +1,40 @@
+{% extends 'base/base.html' %}
+{% block title %}
+    register page
+{% endblock %}
+{% block body %}
+    <div class="h-100 w-100">
+        <div>{% include 'base/header.html' %}</div>
+        <div class="container" style="height: 90%">
+            <div class="row">
+                <div class="col-12">
+                    <form action="{% url 'edit_profile' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            {% for feild in form %}
+                                <div>
+                                    {{ feild.label_tag }}
+                                    {{ feild }}
+
+                                    {% for error in  feild.errors %}
+                                        <div class="alert alert-danger mt-2" role="alert">
+                                            {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                            <hr>
+                            {% for form_erorr in form.non_field_errors %}
+                                <div class="alert alert-danger mt-2">{{ form_erorr }}</div>
+                            {% endfor %}
+                            <div class="mt-3">
+                                <button type="submit" class="btn btn-primary">Register</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div>{% include 'base/footer.html' %}</div>
+    </div>
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/card.css' %}">
+{% endblock %}
+{% block body %}
+    <!--Header-->
+    {% include 'base/header.html' %}
+    <!--End Header-->
+
+    <div class="my-container" dir="rtl">
+        <div class="row" style="margin-right: 1.25rem">
+            {% for sub_category in sub_categories %}
+                <div class="col-4 col-lg-2">
+                    <div class="my-rounded border bg-white w-100 h-100">
+                        <a href="{% url 'category_detail' sub_category.slug %}">
+                            <div class="p-2 w-100 h-75">
+                                {% if sub_category.image %}
+                                    <img class="d-block w-100 h-100 m-auto my-rounded" src="{{ sub_category.image.url }}"
+                                         alt="">
+                                {% else %}
+                                    <img class="d-block w-100 h-100 m-auto my-rounded"
+                                         src="{% static 'img/empty-img.jpeg' %}" alt="">
+                                {% endif %}
+                            </div>
+                            <div class="text-center w-75">{{ sub_category.title }}</div>
+                        </a>
+                    </div>
+                </div>
+
+            {% endfor %}
+
+
+        </div>
+        <hr>
+        <div class="row">
+
+            <div class="col-lg-3 d-none d-lg-block">
+                <div class="p-3 my-rounded border bg-white">
+                    <div class="text-right">دسته بندی</div>
+                    <hr>
+                    <div class="text-right">
+
+                        {% for category in parent_categories %}
+                            <div>
+                                <a href="{% url 'category_detail' category.slug %}">
+                                    <span>
+                                <i class="fas fa-chevron-left mx-1" style="font-size: .5rem;"></i>{{ category.title }}
+                                </span>
+                                </a>
+                            </div>
+                        {% endfor %}
+
+                        <div style="">
+
+                            <span style="font-weight: bold">
+                                <i class="fas fa-chevron-left mx-1" style="font-size: .5rem;"></i>{{ category.title }}
+                            </span>
+
+                        </div>
+
+
+                        {% for sub_category in sub_categories %}
+                            <div>
+                                <a href="{% url 'category_detail' sub_category.slug %}">
+                                    <span class="d-inline-block" style="width: 5px"></span>{{ sub_category.title }}
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div>
+
+                </div>
+            </div>
+
+            <!--Card-->
+            <div class="row col-12 col-lg-9">
+                {% for product in products %}
+                    <div class="col-xl-4 col-6">
+                        <div class="card">
+                            <div class="card-img"
+                                 style="background-image:url({{ product.image.url }});">
+                                <div class="overlay">
+                                    <div class="overlay-content">
+                                        <a href="{% url 'product_single' product.slug %}">View Page</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-content" style="text-align: right">
+                                <a href="{% url 'product_single' product.slug %}">
+                                    <h2>{{ product.name }}</h2>
+                                    {% if product.shop_product_product.all.0 %}
+                                        <p>{{ product.calculate_price }} تومان</p>
+                                    {% endif %}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <!--End Card-->
+        </div>
+    </div>
+
+    <!--Footer-->
+    {% include 'base/footer.html' %}
+    <!--End Footer-->
+
+{% endblock %}
+{% block javascript %}
+    <script>
+        $(document).ready(function () {
+
+            $('.card').delay(1800).queue(function (next) {
+                $(this).removeClass('hover');
+                $('a.hover').removeClass('hover');
+                next();
+            });
+        });
+    </script>
+{% endblock %}

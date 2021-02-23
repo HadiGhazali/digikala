@@ -1,0 +1,161 @@
+.my-container {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto
+}
+
+@media (min-width: 576px) {
+    .my-container {
+        max-width: 540px
+    }
+}
+
+@media (min-width: 768px) {
+    .my-container {
+        max-width: 720px
+    }
+}
+
+@media (min-width: 992px) {
+    .my-container {
+        max-width: 960px
+    }
+}
+
+@media (min-width: 1200px) {
+    .my-container {
+        max-width: 1140px
+    }
+}
+
+@media (min-width: 1600px) {
+    .my-container {
+        max-width: 1560px
+    }
+}
+
+
+@media (min-width: 576px) {
+    .custom-height {
+        height: 200px
+    }
+}
+
+@media (min-width: 768px) {
+    .custom-height {
+        height: 300px
+    }
+}
+
+@media (min-width: 992px) {
+    .custom-height {
+        height: 350px
+    }
+}
+
+@media (min-width: 1200px) {
+    .custom-height {
+        height: 400px
+    }
+}
+
+@media (min-width: 1600px) {
+    .custom-height {
+        height: 450px
+    }
+}
+
+.my-rounded {
+    border-radius: .25rem !important
+}
+
+.shadow:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    height: 99% !important;
+}
+
+@media (min-width: 576px) {
+    .custom-height-1 {
+        height: 50px
+    }
+}
+
+@media (min-width: 768px) {
+    .custom-height-1 {
+        height: 80px
+    }
+}
+
+@media (min-width: 992px) {
+    .custom-height-1 {
+        height: 100px
+    }
+}
+
+@media (min-width: 1200px) {
+    .custom-height-1 {
+        height: 120px
+    }
+}
+
+@media (min-width: 1600px) {
+    .custom-height {
+        height: 450px
+    }
+}
+
+a {
+    text-decoration: none;
+    color: black !important;
+}
+
+a:hover {
+    border-bottom: none !important;
+    text-decoration: none !important;
+}
+
+.my-rounded-1 {
+    border-radius: .25rem !important
+}
+
+@media (min-width: 576px) {
+    .image-size {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+.image-size {
+    width: 150px;
+    height: 150px;
+}
+
+@media (min-width: 768px) {
+    .image-size {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+@media (min-width: 992px) {
+    .image-size {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .image-size {
+        width: 250px;
+        height: 250px;
+    }
+}
+
+@media (min-width: 1600px) {
+    .image-size {
+        width: 300px;
+        height: 300px;
+    }
+}
