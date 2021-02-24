@@ -89,3 +89,24 @@ def create_comment(request):
     response = {'product_id': new_comment.id, 'text': new_comment.text, 'rate': new_comment.rate}
     return HttpResponse(json.dumps(response), status=201)
 
+
+@csrf_exempt
+def get_category(request):
+    result = {}
+    main_categories = Category.objects.filter(parent=None)
+    slugs = []
+    titles = []
+    i = 0
+    for main_category in main_categories:
+        sub_category_slugs = []
+        sub_category_titles = []
+        # slugs.append(main_category.slug)
+        # titles.append(main_category.title)
+        for sub_category in main_category.children.all():
+            sub_category_slugs.append(sub_category.slug)
+            sub_category_titles.append(sub_category.title)
+
+        result[i] = {'slug': main_category.slug, 'title': main_category.title,
+                     'sub_categories': {'slugs': sub_category_slugs, 'titles': sub_category_titles}}
+        i += 1
+    return HttpResponse(json.dumps(result), status=201)

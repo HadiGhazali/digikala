@@ -102,9 +102,9 @@
                     </div>
                 {% else %}
                     <div dir="rtl" class="text-right">
-                        <a href="{% url 'login' %}">
+                        <a href="{% url 'home_view' %}">
                             <i class="fas fa-sign-in-alt mx-2" style="color: #e4a000"></i>
-                            <span>ورود به حساب کاربری</span>
+                            <span>رفتن به صفحه نخست</span>
                         </a>
                     </div>
                 {% endif %}
@@ -241,7 +241,15 @@
                 success: function (response) {
                     let res = JSON.parse(response)
                     $(`#total_price`).text(res.total_price)
-                    $(`#countItemSpan`).text(res.count_of_items)
+                    $(`#countItemSpan`).text(`(${res.count_of_items})`)
+                }
+            })
+            $.ajax({
+                type: 'POST',
+                url:{% url 'get_count_of_basket_item' %},
+                success: function (response) {
+                    let res = JSON.parse(response)
+                    $(`#countOfItems`).text(res.count_of_items)
                 }
             })
         }

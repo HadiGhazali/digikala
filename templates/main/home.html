@@ -170,16 +170,17 @@
     <div class="my-container my-3">
         <div class="row">
             {% for category in categories|slice:":4" %}
-                <div class="h-100 my-rounded col-3 w-100 p-0">
+                <div class="my-rounded col-3 my-3 w-100 p-0">
                     <div class="m-2 p-0 h-100 ">
-                        <figure class="figure h-100 w-100 mx-auto">
+
                             {% if category.image %}
+                                <a href="{% url 'category_detail' category.slug %}">
                                 <img src="{{ category.image.url }}"
                                      class="figure-img img-fluid w-100 my-rounded h-100 mx-auto"
                                      alt="A generic square placeholder image with rounded corners in a figure.">
+                                </a>
                             {% endif %}
 
-                        </figure>
                     </div>
                 </div>
             {% endfor %}

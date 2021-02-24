@@ -4,7 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
-from Accounts.models import Address
+from Accounts.models import Address, ApplyingForShop
 from Accounts.validators import validate_username, validate_phone_number, validate_password
 
 User = get_user_model()
@@ -98,3 +98,13 @@ class EditProfile(forms.ModelForm):
                 code='invalid'
             )
         validate_phone_number(self.cleaned_data['phone_number'])
+
+
+class ApplyingForShopForm(forms.ModelForm):
+    class Meta:
+        model = ApplyingForShop
+        fields = ('name', 'description')
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.TextInput(attrs={'class': 'form-control'}),
+        }

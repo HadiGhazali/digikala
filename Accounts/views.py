@@ -3,10 +3,11 @@ import json
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponseRedirect, HttpResponse
+from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView, UpdateView
-from Accounts.forms import LoginForm, UserRegistrationForm, AddAddressForm, EditProfile
+from Accounts.forms import LoginForm, UserRegistrationForm, AddAddressForm, EditProfile, ApplyingForShopForm
 from Accounts.models import Address
 
 
@@ -75,4 +76,16 @@ class EditProfileView(UpdateView):
         user.set_password(password)
         user.save()
         update_session_auth_hash(self.request, self.request.user)
+        return HttpResponseRedirect(self.get_success_url())
+
+
+class ApplyingForShopView(FormView):
+    form_class = ApplyingForShopForm
+    template_name = 'accounts/applying_for_shop.html'
+    success_url = reverse_lazy('home_view')
+
+    def form_valid(self, form):
+        f = form.save(commit=False)
+        f.user = self.request.user
+        f.save()
         return HttpResponseRedirect(self.get_success_url())

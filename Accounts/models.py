@@ -51,7 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     EMAIL_FIELD = 'username'
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ('phone_number', )
+    REQUIRED_FIELDS = ('phone_number',)
 
     is_staff = models.BooleanField(
         _('staff status'),
@@ -132,6 +132,21 @@ class Shop(models.Model):
     class Meta:
         verbose_name = _('shop')
         verbose_name_plural = _('shops')
+
+    def __str__(self):
+        return self.name
+
+
+class ApplyingForShop(models.Model):
+    user = models.ForeignKey(User, verbose_name=_('User'), on_delete=models.CASCADE)
+    name = models.CharField(_('name'), max_length=150)
+    description = models.TextField(_('Description'), max_length=150)
+    create_at = models.DateTimeField(_('Create at'), auto_now_add=True)
+    update_at = models.DateTimeField(_('Update at'), auto_now=True)
+
+    class Meta:
+        verbose_name = _('shop request')
+        verbose_name_plural = _('shop requests')
 
     def __str__(self):
         return self.name

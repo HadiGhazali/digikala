@@ -159,3 +159,39 @@ a:hover {
         height: 300px;
     }
 }
+
+.my-border-color{
+    border: #919191 solid 1px;
+}
+
+.button-bg-color{
+    background-color: #e5e5e5;
+}
+
+.responsive-width {
+width: 75%;
+}
+
+@media (min-width: 768px) {
+    .responsive-width {
+        width: 75%;
+    }
+}
+
+@media (min-width: 992px) {
+    .responsive-width {
+        width: 75%;
+    }
+}
+
+@media (min-width: 1200px) {
+    .responsive-width {
+        width: 75%;
+    }
+}
+
+@media (min-width: 1600px) {
+    .responsive-width {
+        width: 50%;
+    }
+}

@@ -104,3 +104,10 @@ class PaymentView(TemplateView):
         context['basket'] = basket
         context['basket_item'] = basket.get_item()
         return context
+
+
+@csrf_exempt
+def get_count_of_basket_item(request):
+    basket = get_object_or_404(Basket, user=request.user)
+    response = {'count_of_items': basket.count_of_items}
+    return HttpResponse(json.dumps(response), status=201)
