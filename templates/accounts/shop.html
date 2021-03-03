@@ -7,7 +7,7 @@
     <!--Header-->
     {% include 'base/header.html' %}
     <!--End Header-->
-    <form action="{% url 'category_detail' category.slug %}" id="checkbox-container" method="get"
+    <form action="{% url 'shop_detail' shop.slug %}" id="checkbox-container" method="get"
           autocomplete="off">
         <div class="my-container" dir="rtl" id="lablablab">
             <div class="row" style="margin-right: 1.25rem">
@@ -38,39 +38,7 @@
             <div class="row">
 
                 <div class="col-lg-3 d-none d-lg-block">
-                    <div class="p-3 my-rounded border bg-white">
-                        <div class="text-right">دسته بندی</div>
-                        <hr>
-                        <div class="text-right">
 
-                            {% for category in parent_categories %}
-                                <div>
-                                    <a href="{% url 'category_detail' category.slug %}">
-                                    <span>
-                                <i class="fas fa-chevron-left mx-1" style="font-size: .5rem;"></i>{{ category.title }}
-                                </span>
-                                    </a>
-                                </div>
-                            {% endfor %}
-
-                            <div style="">
-
-                            <span style="font-weight: bold">
-                                <i class="fas fa-chevron-left mx-1" style="font-size: .5rem;"></i>{{ category.title }}
-                            </span>
-
-                            </div>
-
-
-                            {% for sub_category in sub_categories %}
-                                <div>
-                                    <a href="{% url 'category_detail' sub_category.slug %}">
-                                        <span class="d-inline-block" style="width: 5px"></span>{{ sub_category.title }}
-                                    </a>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
                     <div class="p-3 my-rounded border bg-white my-3">
                         <div class="text-right">فیلتر ها</div>
                         <hr>
@@ -197,33 +165,33 @@
 
     </script>
     <script type="text/javascript">
-        var checkboxValues = JSON.parse(sessionStorage.getItem('checkboxValues')) || {},
+        var checkboxValues1 = JSON.parse(sessionStorage.getItem('checkboxValues1')) || {},
             $checkboxes = $("#checkbox-container :checkbox");
 
         $checkboxes.on("change", function () {
             $checkboxes.each(function () {
-                checkboxValues[this.id] = this.checked;
+                checkboxValues1[this.id] = this.checked;
             });
 
-            sessionStorage.setItem("checkboxValues", JSON.stringify(checkboxValues));
+            sessionStorage.setItem("checkboxValues1", JSON.stringify(checkboxValues1));
         });
         // On page load
-        $.each(checkboxValues, function (key, value) {
+        $.each(checkboxValues1, function (key, value) {
             let e = $("#" + key)
             e.prop('checked', value);
         });
-        let activeClass = JSON.parse(sessionStorage.getItem('activeClass')) || {},
+        let activeClass1 = JSON.parse(sessionStorage.getItem('activeClass1')) || {},
             $radios = $("#order_by_container :radio");
 
         $radios.on("change", function () {
             $radios.each(function () {
-                activeClass[this.id] = this.checked;
+                activeClass1[this.id] = this.checked;
             });
 
-            sessionStorage.setItem("activeClass", JSON.stringify(activeClass));
+            sessionStorage.setItem("activeClass1", JSON.stringify(activeClass1));
         });
         // On page load
-        $.each(activeClass, function (key, value) {
+        $.each(activeClass1, function (key, value) {
             let e = $("#" + key)
             e.prop('checked', value);
             if (value) {

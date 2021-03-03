@@ -7,9 +7,10 @@
     <!--Header-->
     {% include 'base/header.html' %}
     <!--End Header-->
-    <form action="{% url 'category_detail' category.slug %}" id="checkbox-container" method="get"
+    <form action="{% url 'search_detail' %}" id="checkbox-container" method="get"
           autocomplete="off">
         <div class="my-container" dir="rtl" id="lablablab">
+
             <div class="row" style="margin-right: 1.25rem">
                 {% for sub_category in sub_categories %}
                     <div class="col-4 col-lg-2">
@@ -38,55 +39,8 @@
             <div class="row">
 
                 <div class="col-lg-3 d-none d-lg-block">
-                    <div class="p-3 my-rounded border bg-white">
-                        <div class="text-right">دسته بندی</div>
-                        <hr>
-                        <div class="text-right">
-
-                            {% for category in parent_categories %}
-                                <div>
-                                    <a href="{% url 'category_detail' category.slug %}">
-                                    <span>
-                                <i class="fas fa-chevron-left mx-1" style="font-size: .5rem;"></i>{{ category.title }}
-                                </span>
-                                    </a>
-                                </div>
-                            {% endfor %}
-
-                            <div style="">
-
-                            <span style="font-weight: bold">
-                                <i class="fas fa-chevron-left mx-1" style="font-size: .5rem;"></i>{{ category.title }}
-                            </span>
-
-                            </div>
 
 
-                            {% for sub_category in sub_categories %}
-                                <div>
-                                    <a href="{% url 'category_detail' sub_category.slug %}">
-                                        <span class="d-inline-block" style="width: 5px"></span>{{ sub_category.title }}
-                                    </a>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="p-3 my-rounded border bg-white my-3">
-                        <div class="text-right">فیلتر ها</div>
-                        <hr>
-                        <div class="text-right">
-                            {% for brand in brands %}
-                                <div class="form-check form-switch"
-                                     dir="rtl">
-                                    <input class="form-check-input" type="checkbox" id="{{ brand.slug }}" name="brand"
-                                           value="{{ brand.slug }}">
-                                    <label class="mx-3 form-check-label text-left"
-                                           for="{{ brand.slug }}">{{ brand.name }}</label>
-                                </div>
-                            {% endfor %}
-
-                        </div>
-                    </div>
                 </div>
 
 
@@ -99,43 +53,9 @@
                                     <i class="fas fa-bars d-inline-block m-auto" style="font-size: 1.25rem">
 
                                     </i>
-                                    <div class="d-inline-block h-100 m-auto">
-                                        <div class="d-inline-block m-auto">مرتب سازی بر
-                                            اساس
-                                            :
-                                        </div>
-                                    </div>
-                                    <div class="d-inline-block mx-2"
-                                         id="order_by_container">
-                                        <div class="d-inline-block">
-                                            <input name="order_by" id="create_at" value="create_at" type="radio"
-                                                   class="d-none">
-                                            <label class="d-inline-block cursor-pointer btn-sm btn-light"
-                                                   for="create_at">جدیدترین</label>
-                                        </div>
-
-                                        <div class="d-inline-block mx-2">
-                                            <input name="order_by" id="hit_count" value="hit_count" type="radio"
-                                                   class="d-none">
-                                            <label class="d-inline-block btn-sm btn-light" for="hit_count">پر بازدیدترین
-                                                ها</label>
-                                        </div>
 
 
-                                        <div class="d-inline-block mx-2">
-                                            <input name="order_by" id="low_price" value="low_price" type="radio"
-                                                   class="d-none">
-                                            <label class="d-inline-block btn-sm btn-light" for="low_price">ارزان ترین
-                                                ها</label>
-                                        </div>
 
-
-                                        <div class="d-inline-block mx-2">
-                                            <input name="order_by" id="high_price" value="high_price" type="radio"
-                                                   class="d-none">
-                                            <label class="d-inline-block btn-sm btn-light" for="high_price">گران ترین
-                                                ها</label>
-                                        </div>
 
 
                                     </div>

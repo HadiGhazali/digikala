@@ -1,16 +1,19 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
 from django.views.generic import TemplateView
 from django.views.decorators.csrf import csrf_exempt
 import json
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from Products.models import ShopProduct
 from .models import Basket, BasketItem, Order, OrderItem, Payment
 
 
 # Create your views here.
-class BasketView(TemplateView):
+class BasketView(LoginRequiredMixin, TemplateView):
     template_name = 'order/basket.html'
+    login_url = reverse_lazy('login')
 
     def get_context_data(self, **kwargs):
         context = super(BasketView, self).get_context_data()
@@ -28,6 +31,7 @@ def get_slug(request):
 
 
 @csrf_exempt
+@login_required(login_url=reverse_lazy('login'))
 def add_to_basket(request):
     data = json.loads(request.body)
     shop_product = get_object_or_404(ShopProduct, id=data['shop_product_id'])
@@ -39,6 +43,7 @@ def add_to_basket(request):
 
 
 @csrf_exempt
+@login_required(login_url=reverse_lazy('login'))
 def increase_or_decrease_count(request):
     data = json.loads(request.body)
     item = get_object_or_404(BasketItem, id=data['item_id'])
@@ -57,6 +62,7 @@ def increase_or_decrease_count(request):
 
 
 @csrf_exempt
+@login_required(login_url=reverse_lazy('login'))
 def delete_item(request):
     data = json.loads(request.body)
     item = get_object_or_404(BasketItem, id=data['item_id'])
@@ -66,6 +72,7 @@ def delete_item(request):
 
 
 @csrf_exempt
+@login_required(login_url=reverse_lazy('login'))
 def calculate_total_price(request):
     data = json.loads(request.body)
     basket = get_object_or_404(Basket, id=data['basket_id'])
@@ -75,6 +82,7 @@ def calculate_total_price(request):
 
 
 @csrf_exempt
+@login_required(login_url=reverse_lazy('login'))
 def create_order(request):
     data = json.loads(request.body)
     basket = get_object_or_404(Basket, id=data['basket_id'])
@@ -95,7 +103,7 @@ def create_order(request):
     return HttpResponse(status=201)
 
 
-class PaymentView(TemplateView):
+class PaymentView(LoginRequiredMixin, TemplateView):
     template_name = 'order/payment.html'
 
     def get_context_data(self, **kwargs):
@@ -108,6 +116,8 @@ class PaymentView(TemplateView):
 
 @csrf_exempt
 def get_count_of_basket_item(request):
-    basket = get_object_or_404(Basket, user=request.user)
-    response = {'count_of_items': basket.count_of_items}
-    return HttpResponse(json.dumps(response), status=201)
+    if request.user.is_authenticated:
+        basket = get_object_or_404(Basket, user=request.user)
+        response = {'count_of_items': basket.count_of_items}
+        return HttpResponse(json.dumps(response), status=201)
+    return HttpResponse(status=201)

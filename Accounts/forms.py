@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from Accounts.models import Address, ApplyingForShop
 from Accounts.validators import validate_username, validate_phone_number, validate_password
+from Products.models import ShopProduct
 
 User = get_user_model()
 
@@ -107,4 +108,30 @@ class ApplyingForShopForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+
+class ManageProductForm(forms.ModelForm):
+    class Meta:
+        model = ShopProduct
+        fields = ('product', 'shop', 'quantity', 'price')
+
+
+class EditShopProduct(forms.ModelForm):
+    class Meta:
+        model = ShopProduct
+        fields = ('quantity', 'price')
+        widgets = {
+            'quantity': forms.TextInput(attrs={'class': 'form-control'}),
+            'price': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+
+class AddShopProductForm(forms.ModelForm):
+    class Meta:
+        model = ShopProduct
+        fields = ('product', 'quantity', 'price')
+        widgets = {
+            'quantity': forms.TextInput(attrs={'class': 'form-control'}),
+            'price': forms.TextInput(attrs={'class': 'form-control'}),
         }

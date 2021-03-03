@@ -23,8 +23,9 @@
                 <div id="myCarousel" class="carousel slide my-2" data-ride="carousel">
                     <ol class="carousel-indicators">
                         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                        <li data-target="#myCarousel" data-slide-to="1"></li>
-                        <li data-target="#myCarousel" data-slide-to="2"></li>
+                        {% for number in number_list %}
+                            <li data-target="#myCarousel" data-slide-to="{{ number }}"></li>
+                        {% endfor %}
                     </ol>
                     <div class="carousel-inner h-100">
                         <div class="carousel-item active h-100">
@@ -50,7 +51,8 @@
                                     <div class="carousel-caption text-left">
                                         <h1>{{ slide.title }}</h1>
                                         <p>{{ slide.subtitle }}</p>
-                                        <p><a class="btn btn-lg btn-primary" href="#" role="button">Sign up today</a>
+                                        <p><a class="btn btn-lg btn-primary" href="{% url 'register' %}" role="button">Sign
+                                            up today</a>
                                         </p>
                                     </div>
                                 </div>
@@ -98,7 +100,7 @@
                         <div class="carousel-inner">
                             <div class="carousel-item active">
                                 <div class="row custom-height">
-                                    {% for product in products|slice:":4" %}
+                                    {% for product in special_product_1|slice:":4" %}
                                         <div class="col-3">
                                             <a href="{% url 'product_single' product.slug %}">
                                                 <div class="h-100 bg-white my-rounded w-100">
@@ -107,9 +109,16 @@
                                                              class="figure-img img-fluid w-100 my-rounded h-100 p-1 mx-auto"
                                                              alt="A generic square placeholder image with my-rounded corners in a figure.">
                                                     </figure>
-                                                    <h3>
-                                                        {{ product.name }}
-                                                    </h3>
+                                                    <div class="m-2">
+                                                        <h3 style="font-size: 15px" dir="rtl" class="text-right">
+                                                            {{ product.name }}
+                                                        </h3>
+                                                        <p class="text-left font-weight-bold" style="font-size: 16px;
+                                                                                                 margin-top:30%">
+                                                            {{ product.calculate_price }}
+                                                            تومان</p>
+
+                                                    </div>
                                                 </div>
                                             </a>
                                         </div>
@@ -118,20 +127,27 @@
                             </div>
                             <div class="carousel-item">
                                 <div class="row custom-height">
-                                    {% for product in products|slice:"4:8" %}
+                                    {% for product in special_product_1|slice:"4:8" %}
                                         <div class="col-3">
-                                            <div class="h-100 mx-3 bg-white my-rounded">
-                                                <figure class="figure h-50">
-                                                    {% if product.image %}
+                                            <a href="{% url 'product_single' product.slug %}">
+                                                <div class="h-100 bg-white my-rounded w-100">
+                                                    <figure class="figure h-50 w-100 mx-auto">
                                                         <img src="{{ product.image.url }}"
-                                                             class="figure-img img-fluid my-rounded h-100 p-1"
-                                                             alt="A generic square placeholder image with rounded corners in a figure.">
-                                                    {% endif %}
-                                                </figure>
-                                                <h3>
-                                                    {{ product.name }}
-                                                </h3>
-                                            </div>
+                                                             class="figure-img img-fluid w-100 my-rounded h-100 p-1 mx-auto"
+                                                             alt="A generic square placeholder image with my-rounded corners in a figure.">
+                                                    </figure>
+                                                    <div class="m-2">
+                                                        <h3 style="font-size: 15px" dir="rtl" class="text-right">
+                                                            {{ product.name }}
+                                                        </h3>
+                                                        <p class="text-left font-weight-bold" style="font-size: 16px;
+                                                                                                 margin-top:30%">
+                                                            {{ product.calculate_price }}
+                                                            تومان</p>
+
+                                                    </div>
+                                                </div>
+                                            </a>
                                         </div>
                                     {% endfor %}
                                 </div>
@@ -173,13 +189,13 @@
                 <div class="my-rounded col-3 my-3 w-100 p-0">
                     <div class="m-2 p-0 h-100 ">
 
-                            {% if category.image %}
-                                <a href="{% url 'category_detail' category.slug %}">
+                        {% if category.image %}
+                            <a href="{% url 'category_detail' category.slug %}">
                                 <img src="{{ category.image.url }}"
                                      class="figure-img img-fluid w-100 my-rounded h-100 mx-auto"
                                      alt="A generic square placeholder image with rounded corners in a figure.">
-                                </a>
-                            {% endif %}
+                            </a>
+                        {% endif %}
 
                     </div>
                 </div>
@@ -197,41 +213,58 @@
                         <div class="carousel-inner">
                             <div class="carousel-item active">
                                 <div class="row custom-height ">
-                                    {% for product in products|slice:":4" %}
-                                        <div class="col-3 w-100">
-                                            <div class="h-100 bg-white my-rounded w-100">
-                                                <figure class="figure h-50 w-100 mx-auto">
-                                                    {% if product.image %}
-                                                        <img src="{{ product.image.url }}"
-                                                             class="figure-img img-fluid w-100 my-rounded h-100 p-1 mx-auto"
-                                                             alt="A generic square placeholder image with my-rounded corners in a figure.">
-                                                    {% endif %}
-                                                </figure>
-                                                <h3>
-                                                    {{ product.name }}
-                                                </h3>
-                                            </div>
-                                        </div>
+                                    {% for product in special_product_2|slice:":4" %}
+                                        <div class="col-3">
+                                            <a href="{% url 'product_single' product.slug %}">
+                                                <div class="h-100 bg-white my-rounded w-100">
+                                                    <figure class="figure h-50 w-100 mx-auto">
+                                                        {% if product.image %}
+                                                            <img src="{{ product.image.url }}"
+                                                                 class="figure-img img-fluid w-100 my-rounded h-100 p-1 mx-auto"
+                                                                 alt="A generic square placeholder image with my-rounded corners in a figure.">
+                                                        {% endif %}
+                                                    </figure>
+                                                    <div class="m-2">
+                                                        <h3 style="font-size: 15px" dir="rtl" class="text-right">
+                                                            {{ product.name }}
+                                                        </h3>
+                                                        <p class="text-left font-weight-bold" style="font-size: 16px;
+                                                                                                 margin-top:30%">
+                                                            {{ product.calculate_price }}
+                                                            تومان</p>
 
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
                                     {% endfor %}
                                 </div>
                             </div>
                             <div class="carousel-item">
                                 <div class="row custom-height">
-                                    {% for product in products|slice:"4:8" %}
+                                    {% for product in special_product_2|slice:"4:8" %}
                                         <div class="col-3">
-                                            <div class="h-100 m-2 bg-white rounded">
-                                                <figure class="figure h-50">
-                                                    {% if product.image %}
-                                                        <img src="{{ product.image.url }}"
-                                                             class="figure-img img-fluid rounded h-100 p-1"
-                                                             alt="A generic square placeholder image with rounded corners in a figure.">
-                                                    {% endif %}
-                                                </figure>
-                                                <h3>
-                                                    {{ product.name }}
-                                                </h3>
-                                            </div>
+                                            <a href="{% url 'product_single' product.slug %}">
+                                                <div class="h-100 bg-white my-rounded w-100">
+                                                    <figure class="figure h-50 w-100 mx-auto">
+                                                        {% if product.image %}
+                                                            <img src="{{ product.image.url }}"
+                                                                 class="figure-img img-fluid w-100 my-rounded h-100 p-1 mx-auto"
+                                                                 alt="A generic square placeholder image with my-rounded corners in a figure.">
+                                                        {% endif %}
+                                                    </figure>
+                                                    <div class="m-2">
+                                                        <h3 style="font-size: 15px" dir="rtl" class="text-right">
+                                                            {{ product.name }}
+                                                        </h3>
+                                                        <p class="text-left font-weight-bold" style="font-size: 16px;
+                                                                                                 margin-top:30%">
+                                                            {{ product.calculate_price }}
+                                                            تومان</p>
+
+                                                    </div>
+                                                </div>
+                                            </a>
                                         </div>
                                     {% endfor %}
                                 </div>
@@ -288,13 +321,13 @@
 
     <!--Multi Slider-->
     <div class="my-3">
-        <div class="my-container bg-white">
-            <div class="row">
-                <div class="col-1">
-                    Car
+        <div class="my-container bg-white text-right" dir="rtl">
+            <div class="row text-right" dir="rtl">
+                <div class="col-2">
+                    {{ category1.title }}
                     <hr style="background-color: #d41e0c">
                 </div>
-                <div class="col-11">
+                <div class="col-10">
                     <br>
                     <hr>
                 </div>
@@ -305,18 +338,29 @@
                         <div class="carousel-inner">
                             <div class="carousel-item active">
                                 <div class="row custom-height ">
-                                    {% for car in CarProducts|slice:":5" %}
-                                        <div class="col-2 w-100 ">
-                                            <div class="h-100 bg-white my-rounded w-100 shadow">
-                                                <figure class="figure h-50 w-100 mx-auto">
-                                                    <img src="{{ car.image.url }}"
-                                                         class="figure-img img-fluid w-100 my-rounded h-100 p-1 mx-auto"
-                                                         alt="A generic square placeholder image with my-rounded corners in a figure.">
-                                                </figure>
-                                                <h3>
-                                                    {{ car.name }}
-                                                </h3>
-                                            </div>
+                                    {% for product in special_category_1|slice:":5" %}
+                                        <div class="col-2 w-100">
+                                            <a href="{% url 'product_single' product.slug %}">
+                                                <div class="h-100 bg-white my-rounded w-100 shadow">
+                                                    <figure class="figure h-50 w-100 mx-auto">
+                                                        {% if product.image %}
+                                                            <img src="{{ product.image.url }}"
+                                                                 class="figure-img img-fluid w-100 my-rounded h-100 p-1 mx-auto"
+                                                                 alt="A generic square placeholder image with my-rounded corners in a figure.">
+                                                        {% endif %}
+                                                    </figure>
+                                                    <div class="m-2">
+                                                        <h3 style="font-size: 15px" dir="rtl" class="text-right">
+                                                            {{ product.name }}
+                                                        </h3>
+                                                        <p class="text-left font-weight-bold" style="font-size: 16px;
+                                                                                                 margin-top:30%">
+                                                            {{ product.calculate_price }}
+                                                            تومان</p>
+
+                                                    </div>
+                                                </div>
+                                            </a>
                                         </div>
 
                                     {% endfor %}
@@ -324,19 +368,31 @@
                             </div>
                             <div class="carousel-item">
                                 <div class="row custom-height">
-                                    {% for car in CarProducts|slice:"5:10" %}
-                                        <div class="col-2">
-                                            <div class="h-100 m-2 bg-white rounded shadow">
-                                                <figure class="figure h-50">
-                                                    <img src="{{ product.image.url }}"
-                                                         class="figure-img img-fluid rounded h-100 p-1"
-                                                         alt="A generic square placeholder image with rounded corners in a figure.">
-                                                </figure>
-                                                <h3>
-                                                    {{ product.name }}
-                                                </h3>
-                                            </div>
+                                    {% for product in special_category_1|slice:"5:10" %}
+                                        <div class="col-2 w-100">
+                                            <a href="{% url 'product_single' product.slug %}">
+                                                <div class="h-100 bg-white my-rounded w-100 shadow">
+                                                    <figure class="figure h-50 w-100 mx-auto">
+                                                        {% if product.image %}
+                                                            <img src="{{ product.image.url }}"
+                                                                 class="figure-img img-fluid w-100 my-rounded h-100 p-1 mx-auto"
+                                                                 alt="A generic square placeholder image with my-rounded corners in a figure.">
+                                                        {% endif %}
+                                                    </figure>
+                                                    <div class="m-2">
+                                                        <h3 style="font-size: 15px" dir="rtl" class="text-right">
+                                                            {{ product.name }}
+                                                        </h3>
+                                                        <p class="text-left font-weight-bold" style="font-size: 16px;
+                                                                                                 margin-top:30%">
+                                                            {{ product.calculate_price }}
+                                                            تومان</p>
+
+                                                    </div>
+                                                </div>
+                                            </a>
                                         </div>
+
                                     {% endfor %}
                                 </div>
                             </div>
@@ -363,10 +419,10 @@
 
     <!--Multi Slider-->
     <div class="my-3">
-        <div class="my-container bg-white">
+        <div class="my-container bg-white text-right" dir="rtl">
             <div class="row">
                 <div class="col-2">
-                    Mavad Shoyande
+                    {{ category2.title }}
                     <hr style="background-color: #d41e0c">
                 </div>
                 <div class="col-10">
@@ -380,18 +436,29 @@
                         <div class="carousel-inner">
                             <div class="carousel-item active">
                                 <div class="row custom-height ">
-                                    {% for shoyande in Mavadshoyande|slice:":5" %}
+                                    {% for product in special_category_2|slice:":5" %}
                                         <div class="col-2 w-100">
-                                            <div class="h-100 bg-white my-rounded w-100 shadow">
-                                                <figure class="figure h-50 w-100 mx-auto">
-                                                    <img src="{{ shoyande.image.url }}"
-                                                         class="figure-img img-fluid w-100 my-rounded h-100 p-1 mx-auto"
-                                                         alt="A generic square placeholder image with my-rounded corners in a figure.">
-                                                </figure>
-                                                <h3>
-                                                    {{ shoyande.name }}
-                                                </h3>
-                                            </div>
+                                            <a href="{% url 'product_single' product.slug %}">
+                                                <div class="h-100 bg-white my-rounded w-100 shadow">
+                                                    <figure class="figure h-50 w-100 mx-auto">
+                                                        {% if product.image %}
+                                                            <img src="{{ product.image.url }}"
+                                                                 class="figure-img img-fluid w-100 my-rounded h-100 p-1 mx-auto"
+                                                                 alt="A generic square placeholder image with my-rounded corners in a figure.">
+                                                        {% endif %}
+                                                    </figure>
+                                                    <div class="m-2">
+                                                        <h3 style="font-size: 15px" dir="rtl" class="text-right">
+                                                            {{ product.name }}
+                                                        </h3>
+                                                        <p class="text-left font-weight-bold" style="font-size: 16px;
+                                                                                                 margin-top:30%">
+                                                            {{ product.calculate_price }}
+                                                            تومان</p>
+
+                                                    </div>
+                                                </div>
+                                            </a>
                                         </div>
 
                                     {% endfor %}
@@ -399,19 +466,31 @@
                             </div>
                             <div class="carousel-item">
                                 <div class="row custom-height">
-                                    {% for shoyande in Mavadshoyande|slice:"5:10" %}
-                                        <div class="col-2">
-                                            <div class="h-100 m-2 bg-white rounded shadow">
-                                                <figure class="figure h-50">
-                                                    <img src="{{ shoyande.image.url }}"
-                                                         class="figure-img img-fluid rounded h-100 p-1"
-                                                         alt="A generic square placeholder image with rounded corners in a figure.">
-                                                </figure>
-                                                <h3>
-                                                    {{ shoyande.name }}
-                                                </h3>
-                                            </div>
+                                    {% for product in special_category_2|slice:"5:10" %}
+                                        <div class="col-2 w-100">
+                                            <a href="{% url 'product_single' product.slug %}">
+                                                <div class="h-100 bg-white my-rounded w-100 shadow">
+                                                    <figure class="figure h-50 w-100 mx-auto">
+                                                        {% if product.image %}
+                                                            <img src="{{ product.image.url }}"
+                                                                 class="figure-img img-fluid w-100 my-rounded h-100 p-1 mx-auto"
+                                                                 alt="A generic square placeholder image with my-rounded corners in a figure.">
+                                                        {% endif %}
+                                                    </figure>
+                                                    <div class="m-2">
+                                                        <h3 style="font-size: 15px" dir="rtl" class="text-right">
+                                                            {{ product.name }}
+                                                        </h3>
+                                                        <p class="text-left font-weight-bold" style="font-size: 16px;
+                                                                                                 margin-top:30%">
+                                                            {{ product.calculate_price }}
+                                                            تومان</p>
+
+                                                    </div>
+                                                </div>
+                                            </a>
                                         </div>
+
                                     {% endfor %}
                                 </div>
                             </div>

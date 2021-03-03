@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 # Register your models here.
-from Products.models import Category, Comment, Brand, Product, ProductImage, ProductMeta, ShopProduct, Like
+from Products.models import Category, Comment, Brand, Product, ProductImage, ProductMeta, ShopProduct, Like, HitCount, \
+    UrlHit
 
 
 class ChildrenItemInline(admin.TabularInline):
@@ -62,3 +63,5 @@ class ShopProductAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Like)
+admin.site.register(HitCount)
+admin.site.register(UrlHit)

@@ -1,10 +1,11 @@
+from django.utils import timezone
+
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
 
 from Accounts.models import Shop
 from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import ugettext_lazy
 
 User = get_user_model()
 
@@ -54,7 +55,7 @@ class Product(models.Model):
     name = models.CharField(_('Name'), max_length=50)
     image = models.ImageField(_('image'), upload_to='product/product/mainImage', null=True, blank=True)
     details = models.TextField(_('Details'))
-    review = models.TextField(_('Details'), null=True, blank=True)
+    review = models.TextField(_('Review'), null=True, blank=True)
     create_at = models.DateTimeField(_('Create at'), auto_now_add=True)
     update_at = models.DateTimeField(_('Update at'), auto_now=True)
 
@@ -77,7 +78,7 @@ class Product(models.Model):
 
     @property
     def calculate_price(self):
-        shop = self.shop_product_product.all()[0]
+        shop = self.shop_product_product.order_by('price')[0]
         return shop.price
 
 
@@ -139,3 +140,45 @@ class Like(models.Model):
     condition = models.BooleanField('Condition')
     create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
     update_at = models.DateTimeField(_("Update at"), auto_now=True)
+
+
+class UrlHit(models.Model):
+    product = models.OneToOneField(Product, verbose_name=_('product'), on_delete=models.CASCADE, related_name='url_hit',
+                                   related_query_name='url_hit')
+    url = models.CharField(max_length=150, unique=True)
+    hits = models.PositiveIntegerField(default=0)
+    daily_hits = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return str(self.url)
+
+    def increase(self):
+        self.hits += 1
+        self.save()
+
+    def get_daily_hits(self):
+        return self.daily_hits
+
+    def set_daily_hits(self, daily_hits):
+        self.daily_hits = daily_hits
+        self.save()
+
+
+class HitCount(models.Model):
+    url_hit = models.ForeignKey(UrlHit, editable=True, on_delete=models.CASCADE)
+    ip = models.CharField(max_length=40)
+    session = models.CharField(max_length=40)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    create_date = models.DateTimeField(auto_now=True)
+    update_date = models.DateTimeField(null=True)
+
+    def updating_date(self):
+        self.update_date = timezone.now()
+        self.save()
+
+    def get_date(self):
+        return self.update_date.date()
+
+    def set_user(self, user):
+        self.user = user
+        self.save()

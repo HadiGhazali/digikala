@@ -1,0 +1,58 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/card.css' %}">
+{% endblock %}
+{% block body %}
+    <!--Header-->
+    {% include 'base/header.html' %}
+    <!--End Header-->
+    <div class="my-container" dir="rtl" id="lablablab">
+        <div class="row p-2 bg-white my-rounded-1 w-100" style="margin: 1.25rem">
+            {% for object in object_list %}
+                <div class="col-3 col-lg-3 my-3">
+                    <div class="my-rounded border  m-3 bg-white w-100 h-100">
+                        <a href="{% url 'shop_product_view' object.slug %}">
+                            <div class="p-2 w-100 h-75">
+                                {% if object.image %}
+                                    <img class="d-block w-100 h-100 m-auto my-rounded"
+                                         src="{{ object.image.url }}"
+                                         alt="">
+                                {% else %}
+                                    <img class="d-block w-100 h-100 m-auto my-rounded"
+                                         src="{% static 'img/empty-img.jpeg' %}" alt="">
+                                {% endif %}
+                            </div>
+                            <div class="text-center w-75">{{ object.name }}</div>
+                        </a>
+                    </div>
+                </div>
+
+            {% endfor %}
+
+
+        </div>
+        <hr>
+    </div>
+    <!--Footer-->
+    {% include 'base/footer.html' %}
+    <!--End Footer-->
+
+{% endblock %}
+{% block javascript %}
+
+    <script>
+        $(document).ready(function () {
+
+
+            $('.card').delay(1800).queue(function (next) {
+                $(this).removeClass('hover');
+                $('a.hover').removeClass('hover');
+                next();
+            });
+        });
+        const brandForm = document.querySelectorAll(".form-check-input");
+
+    </script>
+{% endblock %}
+

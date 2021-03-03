@@ -1,0 +1,55 @@
+{% extends 'base/base.html' %}
+{% block title %}
+    register page
+{% endblock %}
+{% block body %}
+    <div class="h-100 w-100">
+        <div>{% include 'base/header.html' %}</div>
+        <div class="container" style="height: 90%">
+            <div class="row text-right" dir="rtl">
+                <div class="col-12">
+                    {% if form %}
+                        <form action="{% url 'shop_product_view_detail' object.shop.slug object.product.slug %}"
+                              method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                {% for feild in form %}
+                                    <div>
+                                        {{ feild.label_tag }}
+                                        {{ feild }}
+
+                                        {% for error in  feild.errors %}
+                                            <div class="alert alert-danger mt-2" role="alert">
+                                                {{ error }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endfor %}
+                                <hr>
+                                {% for form_erorr in form.non_field_errors %}
+                                    <div class="alert alert-danger mt-2">{{ form_erorr }}</div>
+                                {% endfor %}
+                                <div class="mt-3">
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                </div>
+                            </div>
+                        </form>
+                    {% else %}
+                        <div class="w-100 m-auto">
+                            <div class="w-100 m-auto">
+                                <i class="d-block m-auto fas fa-user-lock text-center" style="font-size: 30rem"></i>
+                            </div>
+                            <div class="w-100 m-auto my-3">
+                                <p class="text-center my-3" style="font-size: 30px">
+                                    شما به این صفحه دسترسی ندارید
+
+                                </p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div>{% include 'base/footer.html' %}</div>
+    </div>
+{% endblock %}

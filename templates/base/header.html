@@ -24,8 +24,8 @@
         <div class="collapse navbar-collapse" id="collapsibleNavbar">
 
 
-            <form class="form-inline" action="#">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search Cars">
+            <form class="form-inline" method="get" action="{% url 'search_detail' %}">
+                <input class="form-control mr-sm-2" name="search" type="text" placeholder="Search Cars">
                 <button class="btn button-bg-color my-border-color mr-3" type="submit"><i class="fa fa-search"></i>
                     Search
                 </button>
@@ -37,25 +37,33 @@
             {% if user.is_authenticated %}
                 <div class="col-8">
 
-                    <a href="{% url 'logout' %}">
+                    <a href="{% url 'profile' %}">
                         <button class="btn button-bg-color my-border-color mr-3" type="submit">
-                            <span class="m-2">خروج از حساب کاربری</span>
+                            <span class="m-2">حساب کاربری</span>
                             <i class="fas fa-user"></i>
                         </button>
                     </a>
 
 
                 </div>
-                <div class="col-2 text-center p-1">
-                </div>
-                <div class="col-2 text-center p-1">
-                    <a href="{% url 'basket_detail' %}">
-                        <i class="fas fa-shopping-basket" style="font-size: 1.5rem;color: #919191"></i>
-                    </a>
-                    <i class="fas fa-circle" style="font-size: .75rem; color: red">
+
+                {% if user.is_authenticated %}
+                    <div class="col-2 text-center p-1 d-inline-block">
+                        <a href="{% url 'basket_detail' %}">
+                            <i class="fas fa-shopping-basket" style="font-size: 1.5rem;color: #919191"></i>
+                        </a>
+                        <br>
+
                         <span id="countOfItems" style="color: black"></span>
-                    </i>
-                </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="text-center mt-1">
+                            <a href="{% url 'logout' %}">
+                                <i class="fas fa-sign-out-alt" style="font-size: 1.5rem;color: #e4a000"></i>
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
             {% else %}
                 <div class="col-8">
                     <a href="{% url 'login' %}">
@@ -94,6 +102,9 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">سوالی دارید</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'all_shop' %}">همه فروشگاه ها</a>
             </li>
         </ul>
     </div>

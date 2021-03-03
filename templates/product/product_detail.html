@@ -56,7 +56,6 @@
                             <div class="col-4">
                             </div>
                             <div class="col-4">
-                                فروشنده دیگر
                             </div>
                         </div>
                         <hr>
@@ -232,20 +231,27 @@
                             <div class="carousel-inner">
                                 <div class="carousel-item active">
                                     <div class="row custom-height ">
-                                        {% for related_product in related_products|slice:":6" %}
+                                        {% for product in related_products|slice:":5" %}
                                             <div class="col-2 w-100">
-                                                <a href="{% url 'product_single' related_product.slug %}">
+                                                <a href="{% url 'product_single' product.slug %}">
                                                     <div class="h-100 bg-white my-rounded w-100 shadow">
                                                         <figure class="figure h-50 w-100 mx-auto">
-                                                            {% if related_product.image %}
-                                                                <img src="{{ related_product.image.url }}"
+                                                            {% if product.image %}
+                                                                <img src="{{ product.image.url }}"
                                                                      class="figure-img img-fluid w-100 my-rounded h-100 p-1 mx-auto"
                                                                      alt="A generic square placeholder image with my-rounded corners in a figure.">
                                                             {% endif %}
                                                         </figure>
-                                                        <h3>
-                                                            {{ related_product.name }}
-                                                        </h3>
+                                                        <div class="m-2">
+                                                            <h3 style="font-size: 15px" dir="rtl" class="text-right">
+                                                                {{ product.name }}
+                                                            </h3>
+                                                            <p class="text-left font-weight-bold" style="font-size: 16px;
+                                                                                                 margin-top:30%">
+                                                                {{ product.calculate_price }}
+                                                                تومان</p>
+
+                                                        </div>
                                                     </div>
                                                 </a>
                                             </div>
@@ -255,21 +261,31 @@
                                 </div>
                                 <div class="carousel-item">
                                     <div class="row custom-height">
-                                        {% for related_product in related_products|slice:"6:12" %}
-                                            <div class="col-2">
-                                                <a href="{% url 'product_single' related_product.slug %}">
-                                                    <div class="h-100 m-2 bg-white rounded shadow">
-                                                        <figure class="figure h-50">
-                                                            <img src="{{ related_product.image.url }}"
-                                                                 class="figure-img img-fluid rounded h-100 p-1"
-                                                                 alt="A generic square placeholder image with rounded corners in a figure.">
+                                        {% for product in special_category_2|slice:"5:10" %}
+                                            <div class="col-2 w-100">
+                                                <a href="{% url 'product_single' product.slug %}">
+                                                    <div class="h-100 bg-white my-rounded w-100 shadow">
+                                                        <figure class="figure h-50 w-100 mx-auto">
+                                                            {% if product.image %}
+                                                                <img src="{{ product.image.url }}"
+                                                                     class="figure-img img-fluid w-100 my-rounded h-100 p-1 mx-auto"
+                                                                     alt="A generic square placeholder image with my-rounded corners in a figure.">
+                                                            {% endif %}
                                                         </figure>
-                                                        <h3>
-                                                            {{ related_product.name }}
-                                                        </h3>
+                                                        <div class="m-2">
+                                                            <h3 style="font-size: 15px" dir="rtl" class="text-right">
+                                                                {{ product.name }}
+                                                            </h3>
+                                                            <p class="text-left font-weight-bold" style="font-size: 16px;
+                                                                                                 margin-top:30%">
+                                                                {{ product.calculate_price }}
+                                                                تومان</p>
+
+                                                        </div>
                                                     </div>
                                                 </a>
                                             </div>
+
                                         {% endfor %}
                                     </div>
                                 </div>
@@ -314,29 +330,49 @@
 
 
             <div id="ideaContainer">
-                {% for comment in comments %}
-                    <div class="p-3 border">
-                        <div>{{ comment.text }}</div>
-                        <div dir="ltr" class="rating" data-rate-value={{ comment.rate }}></div>
+                {% if comments.0 %}
+                    {% for comment in comments %}
+                        <div class="p-3 border">
+                            <div>{{ comment.text }}</div>
+                            <div dir="ltr" class="rating" data-rate-value={{ comment.rate }}></div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div style="height: 200px" class="p-3 d-flex justify-content-center align-items-center">
+                        <div class="d-flex p-3 border-0">نظری وجود ندارد</div>
+
                     </div>
-                {% endfor %}
+                    <hr>
+                {% endif %}
+
             </div>
-            <div id="formContainer" class="justify-content-center mt-3">
-                <hr>
-                <form id="commentForm" action="">
-                    {% csrf_token %}
-                    {{ form.media }}
-                    <div class="m-auto">
-                        {% for field in form %}
-                            <div style="margin-right: 30%">
-                            {{ field }}
-                            </div>
-                        {% endfor %}
+            {% if user.is_authenticated %}
+                <div id="formContainer" class="justify-content-center mt-3">
+                    <hr>
+                    <form id="commentForm" action="">
+                        {% csrf_token %}
+                        {{ form.media }}
+                        <div class="m-auto">
+                            {% for field in form %}
+                                <div style="margin-right: 30%">
+                                    {{ field }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div dir="ltr" style="margin-right: 30%" id="newCommentRate" class="rating-change-able"
+                             data-rate-value=2></div>
+                        <button type="button" class="btn btn-primary" style="margin-right: 30%"
+                                onclick="creatComment({{ product.id }})">Send Comment
+                        </button>
+                    </form>
+                </div>
+            {% else %}
+                <div style="height: 200px" class="p-3 d-flex justify-content-center align-items-center">
+                        <div class="d-flex p-3 ">برای ارسال نظر باید لاگین باشید</div>
+
                     </div>
-                    <div dir="ltr" style="margin-right: 30%" id="newCommentRate" class="rating-change-able" data-rate-value=2></div>
-                    <button type="button" class="btn btn-primary" style="margin-right: 30%" onclick="creatComment({{ product.id }})">Send Comment</button>
-                </form>
-            </div>
+                    <hr>
+            {% endif %}
 
         </div>
 

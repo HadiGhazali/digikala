@@ -121,12 +121,14 @@ class Address(models.Model):
 
 
 class Shop(models.Model):
-    user = models.ForeignKey(User, verbose_name=_('User'), on_delete=models.CASCADE)
+    user = models.ForeignKey(User, verbose_name=_('User'), on_delete=models.CASCADE, related_name='user_shop',
+                             related_query_name='user_shop')
     name = models.CharField(_('name'), max_length=150)
     description = models.TextField(_('Description'), max_length=150)
     image = models.ImageField(_('image'), upload_to='account/shop/images')
     create_at = models.DateTimeField(_('Create at'), auto_now_add=True)
     update_at = models.DateTimeField(_('Update at'), auto_now=True)
+    slug = models.SlugField(_('slug'), unique=True, db_index=True)
     satisfaction = models.PositiveIntegerField(_('satisfaction'), null=True, blank=True, default=3)
 
     class Meta:
