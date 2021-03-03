@@ -17,6 +17,11 @@
                         <a href="{% url 'user_shop' %}">فروشگاه ها</a>
                     {% endif %}
                 </div>
+                <div class="col-4">
+                    {% if user.user_favorite_product_user %}
+                        <a href="{% url 'favorite_page' %}">علاقه مندی ها</a>
+                    {% endif %}
+                </div>
             </div>
 
             <div class="row">

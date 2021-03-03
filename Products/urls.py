@@ -1,7 +1,8 @@
 from django.urls import path
 
 from Accounts.views import ApplyingForShopView
-from .views import CategoryDetailView, ProductSingle, create_comment, get_category, ShopDetailView, SearchView
+from .views import CategoryDetailView, ProductSingle, create_comment, get_category, ShopDetailView, SearchView, \
+    add_to_favorite, FavoriteView
 
 urlpatterns = [
     path('searching/', SearchView.as_view(), name='search_detail'),
@@ -11,4 +12,6 @@ urlpatterns = [
     path('get_category/', get_category, name='get_category'),
     path('applying_for_shop/', ApplyingForShopView.as_view(), name='applying_for_shop'),
     path('shop/<slug:slug>/', ShopDetailView.as_view(), name='shop_detail'),
+    path('add_to_favorite/', add_to_favorite, name='add_to_favorite'),
+    path('favorite_page/', FavoriteView.as_view(), name='favorite_page'),
 ]

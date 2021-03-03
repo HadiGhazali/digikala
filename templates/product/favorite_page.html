@@ -1,0 +1,67 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/card.css' %}">
+{% endblock %}
+{% block body %}
+    <!--Header-->
+    {% include 'base/header.html' %}
+    <!--End Header-->
+    <div class="my-container" dir="rtl" id="lablablab">
+        <hr>
+        <div class="row">
+
+
+            <!--Card-->
+            <div class="row col-12 col-lg-9" id="productContainer">
+
+                {% for product in object_list %}
+                    <div class="col-xl-4 col-6">
+                        <div class="card">
+                            <div class="card-img"
+                                 style="background-image:url({{ product.image.url }});">
+                                <div class="overlay">
+                                    <div class="overlay-content">
+                                        <a href="{% url 'product_single' product.slug %}">View Page</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-content" style="text-align: right">
+                                <a href="{% url 'product_single' product.slug %}">
+                                    <h2>{{ product.name }}</h2>
+                                    {% if product.shop_product_product.all.0 %}
+                                        <p>{{ product.calculate_price }} تومان</p>
+                                    {% endif %}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!--End Card-->
+    </div>
+
+    <!--Footer-->
+    {% include 'base/footer.html' %}
+    <!--End Footer-->
+
+{% endblock %}
+{% block javascript %}
+
+    <script>
+        $(document).ready(function () {
+
+
+            $('.card').delay(1800).queue(function (next) {
+                $(this).removeClass('hover');
+                $('a.hover').removeClass('hover');
+                next();
+            });
+        });
+
+    </script>
+{% endblock %}
+

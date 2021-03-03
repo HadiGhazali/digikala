@@ -11,7 +11,7 @@ import json
 
 from Accounts.models import Shop
 from .forms import CommentForm, AddProductForm
-from .models import Category, Product, ShopProduct, Comment, HitCount, UrlHit, Brand
+from .models import Category, Product, ShopProduct, Comment, HitCount, UrlHit, Brand, UserFavoriteProduct
 from django.utils import timezone
 
 
@@ -282,3 +282,21 @@ class SearchView(ListView):
         context['brands'] = brand_list
         context['products'] = object_list
         return context
+
+
+@csrf_exempt
+def add_to_favorite(request):
+    data = json.loads(request.body)
+    user = request.user
+    UserFavoriteProduct.objects.create(user=user, product_id=data['product_id'])
+    return HttpResponse(status=201)
+
+
+class FavoriteView(ListView):
+    model = Product
+    paginate_by = 12
+    template_name = 'product/favorite_page.html'
+
+    def get_queryset(self):
+        user_favorite = UserFavoriteProduct.objects.filter(user=self.request.user)
+        return Product.objects.filter(user_favorite_product_product__in=user_favorite)

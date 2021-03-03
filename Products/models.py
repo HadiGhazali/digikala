@@ -89,7 +89,8 @@ class ProductImage(models.Model):
 
 
 class ProductMeta(models.Model):
-    product = models.ForeignKey(Product, verbose_name=_('product'), on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, verbose_name=_('product'), on_delete=models.CASCADE,
+                                related_query_name='product_meta', related_name='product_meta')
     value = models.TextField(_('Value'))
     label = models.CharField(_('Label'), max_length=150)
 
@@ -182,3 +183,14 @@ class HitCount(models.Model):
     def set_user(self, user):
         self.user = user
         self.save()
+
+
+class UserFavoriteProduct(models.Model):
+    user = models.ForeignKey(User, verbose_name=_('User'), on_delete=models.CASCADE,
+                             related_name='user_favorite_product_user', related_query_name='user_favorite_product_user')
+    product = models.ForeignKey(Product, verbose_name=_('Product'), on_delete=models.CASCADE,
+                                related_name='user_favorite_product_product',
+                                related_query_name='user_favorite_product_product')
+
+    class Meta:
+        unique_together = [['product', 'user']]

@@ -10,14 +10,14 @@
     <!--End Header-->
 
     <div class="my-container" dir="rtl">
-        <div style="text-align: right">
-            {% for related_category in related_categories %}
-                {{ related_category }}/
-            {% endfor %}
-        </div>
 
         <!--Product-->
-        <div class="row m-0 p-0">
+        <div class="row m-0 p-0 my-2 bg-white">
+            <div class="col-12 my-2" style="text-align: right">
+                {% for related_category in related_categories %}
+                    {{ related_category }}/
+                {% endfor %}
+            </div>
             <!--Product Images-->
             <div class="col-md-4 col-12">
                 <img src="{{ product.image.url }}" width="100%" class="custom-height">
@@ -37,88 +37,110 @@
             <!--Product Information-->
             <div class="col-md-8 col-12">
                 <h1 style="text-align: right">{{ product.name }}</h1>
+
                 <div class="row">
                     <!--Product Detail-->
-                    <div class="col-7">
-                        <hr>
-                        <p>{{ product.details }}</p>
+                    <div class="col-7" dir="rtl">
+                        <div class="row">
+                            <div class="col-6">
+                                <p class="text-right  font-weight-bold">ویژگی های کالا</p>
+                            </div>
+                            <div class="col-6">
+                                <div id="HeartContainer" type="button" onclick="addToFavorite({{ product.id }})"><i
+                                        class="fas fa-heart my-3" style="font-size: 1.25rem;color: #dc000e"></i></div>
+                            </div>
+                        </div>
+
+
+                        {% for product_value in product.product_meta.all %}
+                            <div class="row text-right" dir="rtl">
+
+                                <div class="text-right col-4 my-2 mx-2" dir="rtl">{{ product_value.label }}</div>
+                                <div class="text-right col-4 my-2 d-inline-block mx-2"
+                                     dir="rtl">{{ product_value.value }}</div>
+
+
+                            </div>
+                        {% endfor %}
                     </div>
                     <!--End Product Detail-->
 
                     <!--Product Shop-->
-                    <div class="col-5 my-3 border rounded" dir="rtl"
-                         style="text-align: right!important; background-color: #e5e5e5;">
+                    <div class="col-5 " dir="rtl"
+                    >
+                        <div class=" my-3 border rounded"
+                             style="text-align: right!important; background-color: #e5e5e5;">
+                            <div class="row">
+                                <div class="col-4" dir="rtl">
+                                    <p class="my-2"> فروشنده</p>
+                                </div>
+                            </div>
+                            <div class="mx-2">
+                                <hr>
+                            </div>
 
-                        <div class="row">
-                            <div class="col-4" dir="rtl">
-                                فروشنده
-                            </div>
-                            <div class="col-4">
-                            </div>
-                            <div class="col-4">
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-2">
-                                <i class="fas fa-store-alt" style="font-size: 1.25rem"></i>
-                            </div>
-                            <div class="col-10">
-                                <div>
-                                    {{ shop_products.0.shop.name }}
-                                    <br>
-                                    <p style="font-size: 10px">
-                                        <span>عملکرد:</span><span>{{ shop_products.0.shop.satisfaction }}</span><span>از 5</span>
-                                    </p>
+                            <div class="row">
+                                <div class="col-2">
+                                    <i class="fas fa-store-alt mx-2" style="font-size: 1.25rem"></i>
                                 </div>
-                                <hr>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2">
-                                <i class="fas fa-shield-alt" style="font-size: 1.25rem"></i>
-                            </div>
-                            <div class="col-10">
-                                <div>
-                                    <p style="font-size: 14px">گارانتی اصلالت و سلامت کالا</p>
-                                </div>
-                                <hr>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2">
-                                <i class="fas fa-warehouse" style="font-size: 1.25rem"></i>
-                            </div>
-                            {% if shop_products.0.check_status %}
                                 <div class="col-10">
                                     <div>
-                                        <p style="font-size: 14px">موجود در انبار</p>
+                                        {{ shop_products.0.shop.name }}
+                                        <br>
+                                        <p style="font-size: 10px">
+                                            <span>عملکرد:</span><span>{{ shop_products.0.shop.satisfaction }}</span><span>از 5</span>
+                                        </p>
                                     </div>
                                     <hr>
                                 </div>
-                            {% else %}
+                            </div>
+                            <div class="row">
+                                <div class="col-2">
+                                    <i class="fas fa-shield-alt mx-2" style="font-size: 1.25rem"></i>
+                                </div>
                                 <div class="col-10">
                                     <div>
-                                        <p style="font-size: 14px">در انبار موجود نمی باشد</p>
+                                        <p style="font-size: 14px">گارانتی اصلالت و سلامت کالا</p>
                                     </div>
                                     <hr>
                                 </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2">
+                                    <i class="fas fa-warehouse mx-2" style="font-size: 1.25rem"></i>
+                                </div>
+                                {% if shop_products.0.check_status %}
+                                    <div class="col-10">
+                                        <div>
+                                            <p style="font-size: 14px">موجود در انبار</p>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                {% else %}
+                                    <div class="col-10">
+                                        <div>
+                                            <p style="font-size: 14px">در انبار موجود نمی باشد</p>
+                                        </div>
+                                        <hr>
+                                    </div>
 
-                            {% endif %}
-                        </div>
-                        <div>
-                            <p>قیمت فروشنده</p>
-                            <p style="text-align: left; font-size: 20px; font-weight: bold;">{{ shop_products.0.price }}
-                                تومان</p>
+                                {% endif %}
+                            </div>
+                            <div class="mx-2">
+                                <p>قیمت فروشنده</p>
+                                <p style="text-align: left; font-size: 20px; font-weight: bold;">{{ shop_products.0.price }}
+                                    تومان</p>
 
+                            </div>
+                            <div class="my-2 p-3">
+                                <a href="{% url 'basket_detail' %}">
+                                    <buttonbutton type="button" onclick="addToBasket({{ shop_products.0.id }})"
+                                            class="btn btn-danger w-100">افزودن به سبد خرید
+                                    </buttonbutton>
+                                </a>
+                            </div>
                         </div>
-                        <div class="my-2 p-3">
-                            <a href="{% url 'basket_detail' %}">
-                                <button type="button" onclick="addToBasket({{ shop_products.0.id }})"
-                                        class="btn btn-danger w-100">افزودن به سبد خرید
-                                </button>
-                            </a>
-                        </div>
+
                     </div>
                 </div>
                 <!--End Product Shop-->
@@ -323,17 +345,21 @@
                 <hr class="bg-danger">
             </div>
             {% if product.review %}
-                <div class="rounded border">
-                    {{ product.review }}
+                <div id="" class="my-rounded-1 border m-3">
+                    <p>نقد و برسی اجمالی</p>
+                    <div>{{ product.review }}</div>
                 </div>
             {% endif %}
 
 
-            <div id="ideaContainer">
+            <div id="ideaContainer" class="m-3 my-rounded-1">
+                <p class="text-right m-3">نظر کاربران</p>
                 {% if comments.0 %}
                     {% for comment in comments %}
-                        <div class="p-3 border">
+                        <div class="p-3 my-2 border">
+                            <div>{{ comment.user }}</div>
                             <div>{{ comment.text }}</div>
+
                             <div dir="ltr" class="rating" data-rate-value={{ comment.rate }}></div>
                         </div>
                     {% endfor %}
@@ -368,10 +394,10 @@
                 </div>
             {% else %}
                 <div style="height: 200px" class="p-3 d-flex justify-content-center align-items-center">
-                        <div class="d-flex p-3 ">برای ارسال نظر باید لاگین باشید</div>
+                    <div class="d-flex p-3 ">برای ارسال نظر باید لاگین باشید</div>
 
-                    </div>
-                    <hr>
+                </div>
+                <hr>
             {% endif %}
 
         </div>
@@ -466,6 +492,23 @@ style="width: 100%; height: 24px; overflow: hidden; position: absolute; top: 0px
         });
 
 
+    </script>
+    <script>
+        function addToFavorite(product_id) {
+            let data = {product_id: product_id}
+            data = JSON.stringify(data)
+            $.ajax({
+                type: 'POST',
+                url:{% url 'add_to_favorite' %},
+                data: data,
+                success: function () {
+                    alert('به علاقه مندی ها اضافه شد')
+                },
+                fail: function () {
+                    alert('Error')
+                }
+            })
+        }
     </script>
     <script src="{% static 'js/rater.min.js' %}"></script>
     <script src="{% static 'js/my-rater.js' %}"></script>
