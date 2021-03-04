@@ -19,7 +19,7 @@ class HomeView(TemplateView):
         context['number_list'] = number_list
         special = Special.objects.all()
         context['special_product_1'] = Product.objects.filter(special__in=special)[:8]
-        context['special_product_2'] = Special.objects.all()[8:16]
+        context['special_product_2'] = Product.objects.filter(special__in=special)[8:16]
         context['categories'] = Category.objects.all()[:5]
         context['BrandIntroduction'] = BrandIntroduction.objects.all()[:2]
         category_1 = SpecialCategory.objects.all()[0].category

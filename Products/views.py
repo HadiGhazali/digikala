@@ -10,7 +10,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 import json
 
 from Accounts.models import Shop
-from .forms import CommentForm, AddProductForm
+from .forms import CommentForm, AddProductForm, FilterForm
 from .models import Category, Product, ShopProduct, Comment, HitCount, UrlHit, Brand, UserFavoriteProduct
 from django.utils import timezone
 
@@ -47,6 +47,14 @@ class CategoryDetailView(DetailView, MultipleObjectMixin):
     def get_context_data(self, **kwargs):
         brands = self.request.GET.getlist('brand', None)
         order_by = self.request.GET.get('order_by', None)
+        choices = set()
+        my_form = FilterForm()
+        for product in Product.objects.filter(category=self.object):
+            if product.brand is not None:
+                choices.add((product.brand.slug, product.brand.name))
+        if self.request.method == 'GET':
+            my_form = FilterForm(self.request.GET)
+            my_form.fields['brand'].choices = choices
         if brands:
             object_list = Product.objects.filter(category=self.object, brand__slug__in=brands).order_by('create_at')
         else:
@@ -60,13 +68,9 @@ class CategoryDetailView(DetailView, MultipleObjectMixin):
         elif order_by == 'hit_count':
             object_list = object_list.order_by('url_hit__hits')
 
-        brand_list = set()
         context = super(CategoryDetailView, self).get_context_data(object_list=object_list, **kwargs)
         context['category_id'] = self.object.id
-        for product in Product.objects.filter(category=self.object):
-            if product.brand is not None:
-                brand_list.add(product.brand)
-        context['brands'] = brand_list
+        context['my_form'] = my_form
         sub_categories = get_sub_categories_of_category(self.object)
         parent_categories = get_parent_categories_of_category(self.object)
         context['products'] = object_list
@@ -206,7 +210,15 @@ class ShopDetailView(DetailView, MultipleObjectMixin):
     def get_context_data(self, **kwargs):
         brands = self.request.GET.getlist('brand', None)
         order_by = self.request.GET.get('order_by', None)
+        choices = set()
+        my_form = FilterForm()
         shop_products = ShopProduct.objects.filter(shop=self.object)
+        for product in Product.objects.filter(shop_product_product__in=shop_products):
+            if product.brand is not None:
+                choices.add((product.brand.slug, product.brand.name))
+        if self.request.method == 'GET':
+            my_form = FilterForm(self.request.GET)
+            my_form.fields['brand'].choices = choices
         object_list = Product.objects.filter(shop_product_product__in=shop_products).order_by('create_at')
 
         if brands:
@@ -221,14 +233,10 @@ class ShopDetailView(DetailView, MultipleObjectMixin):
         elif order_by == 'high_price':
             object_list = sorted(object_list, key=lambda t: t.calculate_price)[::-1]
 
-        brand_list = set()
         context = super(ShopDetailView, self).get_context_data(object_list=object_list, **kwargs)
         context['shop_id'] = self.object.id
-        for product in Product.objects.filter(shop_product_product__in=shop_products):
-            if product.brand is not None:
-                brand_list.add(product.brand)
-        context['brands'] = brand_list
         context['products'] = object_list
+        context['my_form'] = my_form
         return context
 
 

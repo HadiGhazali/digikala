@@ -43,15 +43,14 @@
                         <div class="text-right">فیلتر ها</div>
                         <hr>
                         <div class="text-right">
-                            {% for brand in brands %}
-                                <div class="form-check form-switch"
-                                     dir="rtl">
-                                    <input class="form-check-input" type="checkbox" id="{{ brand.slug }}" name="brand"
-                                           value="{{ brand.slug }}">
-                                    <label class="mx-3 form-check-label text-left"
-                                           for="{{ brand.slug }}">{{ brand.name }}</label>
-                                </div>
-                            {% endfor %}
+                            <div class="form-check form-switch"
+                                 dir="rtl">
+                                {% for field in my_form.brand %}
+                                    {{ field }}
+                                    <br>
+                                {% endfor %}
+
+                            </div>
 
                         </div>
                     </div>
@@ -75,35 +74,11 @@
                                     </div>
                                     <div class="d-inline-block mx-2"
                                          id="order_by_container">
-                                        <div class="d-inline-block">
-                                            <input name="order_by" id="create_at" value="create_at" type="radio"
-                                                   class="d-none">
-                                            <label class="d-inline-block cursor-pointer btn-sm btn-light"
-                                                   for="create_at">جدیدترین</label>
-                                        </div>
+                                        {% for field in my_form.order_by %}
 
-                                        <div class="d-inline-block mx-2">
-                                            <input name="order_by" id="hit_count" value="hit_count" type="radio"
-                                                   class="d-none">
-                                            <label class="d-inline-block btn-sm btn-light" for="hit_count">پر بازدیدترین
-                                                ها</label>
-                                        </div>
+                                            <button class="btn btn-light">{{ field }}</button>
 
-
-                                        <div class="d-inline-block mx-2">
-                                            <input name="order_by" id="low_price" value="low_price" type="radio"
-                                                   class="d-none">
-                                            <label class="d-inline-block btn-sm btn-light" for="low_price">ارزان ترین
-                                                ها</label>
-                                        </div>
-
-
-                                        <div class="d-inline-block mx-2">
-                                            <input name="order_by" id="high_price" value="high_price" type="radio"
-                                                   class="d-none">
-                                            <label class="d-inline-block btn-sm btn-light" for="high_price">گران ترین
-                                                ها</label>
-                                        </div>
+                                        {% endfor %}
 
 
                                     </div>
@@ -161,57 +136,28 @@
                 next();
             });
         });
+        let container = $('#order_by_container input:radio')
+        container.addClass('d-none')
+        for (let radio of container) {
+            if (radio.checked) {
+                let myLabel = $("label[for='" + radio.id + "']")
+                myLabel.parent().removeClass('btn-light')
+                myLabel.parent().addClass('btn-danger')
+            }
+        }
         const brandForm = document.querySelectorAll(".form-check-input");
 
     </script>
     <script type="text/javascript">
-        var checkboxValues1 = JSON.parse(sessionStorage.getItem('checkboxValues1')) || {},
-            $checkboxes = $("#checkbox-container :checkbox");
-
-        $checkboxes.on("change", function () {
-            $checkboxes.each(function () {
-                checkboxValues1[this.id] = this.checked;
-            });
-
-            sessionStorage.setItem("checkboxValues1", JSON.stringify(checkboxValues1));
-        });
-        // On page load
-        $.each(checkboxValues1, function (key, value) {
-            let e = $("#" + key)
-            e.prop('checked', value);
-        });
-        let activeClass1 = JSON.parse(sessionStorage.getItem('activeClass1')) || {},
-            $radios = $("#order_by_container :radio");
-
-        $radios.on("change", function () {
-            $radios.each(function () {
-                activeClass1[this.id] = this.checked;
-            });
-
-            sessionStorage.setItem("activeClass1", JSON.stringify(activeClass1));
-        });
-        // On page load
-        $.each(activeClass1, function (key, value) {
-            let e = $("#" + key)
-            e.prop('checked', value);
-            if (value) {
-                let myLabel = $("label[for='" + e.attr("id") + "']")
-                myLabel.removeClass('btn-light')
-                myLabel.addClass('btn-danger')
-            }
-        });
 
 
         $("#checkbox-container input:checkbox").click(function (e) {
             $("#checkbox-container").submit();
         });
 
-        $('#order_by_container > div').click(function (e) {
-
+        $('#order_by_container label').click(function (e) {
             $("#checkbox-container").submit();
         });
-
-
     </script>
 
 {% endblock %}
